@@ -586,26 +586,94 @@ ACCESSIBILITY REQUIREMENTS — APPLY TO ALL QUESTIONS:
 
   prompt += `
 ═══════════════════════════════════════════════════════════════════════════════
-OUTPUT REQUIREMENTS:
+OUTPUT REQUIREMENTS — FORMATTING IS CRITICAL:
 ═══════════════════════════════════════════════════════════════════════════════
 
 1. Create EXACTLY ${questionCount || 10} questions.
 
-2. Number all questions clearly (1, 2, 3...).
+2. USE CLEAR VISUAL LAYOUT FOR EACH QUESTION TYPE:
 
-3. For multiple choice: List options as A, B, C, D on separate lines.
+**MULTIPLE CHOICE FORMAT:**
+---
+**Question 1** [1 mark]
 
-4. Include mark allocations: [1 mark], [2 marks], etc.
+What atmosphere is created by the witches in Act 1 Scene 1?
 
-5. Format as MARKDOWN with clear structure.
+☐ A) Happy and calm
+
+☐ B) Strange and unsettling
+
+☐ C) Busy and crowded
+
+☐ D) Bright and hopeful
+
+---
+
+**SHORT ANSWER FORMAT:**
+---
+**Question 2** [2 marks]
+
+How does Macbeth earn the title Thane of Cawdor in Act 1?
+
+**Your answer:**
+_____________________________________________
+_____________________________________________
+
+---
+
+**FILL IN THE BLANK FORMAT:**
+---
+**Question 3** [1 mark]
+
+Complete the sentence:
+
+The witches tell Macbeth he will become **_______________** after being Thane of Cawdor.
+
+---
+
+**TRUE/FALSE FORMAT:**
+---
+**Question 4** [1 mark]
+
+True or False: Banquo fully believes the witches' prophecies.
+
+☐ True    ☐ False
+
+---
+
+**EXTENDED RESPONSE FORMAT:**
+---
+**Question 5** [4 marks]
+
+Explain how Lady Macbeth influences Macbeth's decision. Use evidence from the text.
+
+**Your answer:**
+_____________________________________________
+_____________________________________________
+_____________________________________________
+_____________________________________________
+_____________________________________________
+
+---
+
+3. FORMATTING RULES:
+   - Use horizontal rules (---) to separate each question
+   - Put question number and marks in bold at the top
+   - Use blank lines between elements for visual clarity
+   - Use ☐ checkbox symbols for multiple choice options
+   - Each multiple choice option on its OWN line with a blank line between
+   - Provide answer lines using underscores for written responses
+   - Never put multiple choice options on the same line
+
+4. Include mark allocations: [1 mark], [2 marks], etc. after each question number.
 
 ${includeAnswers ? `
-6. INCLUDE ANSWERS at the end in a separate "ANSWERS" section:
+5. INCLUDE ANSWERS at the end in a separate "## ANSWERS" section:
    - Show the correct answer for each question
    - For extended responses, include a model answer or mark scheme points
-` : '6. Do NOT include answers — this is for the student version.'}
+` : '5. Do NOT include answers — this is for the student version.'}
 
-7. At the end, include:
+6. At the end, include:
    - Total marks available
    - Suggested timing
    - Any equipment needed
