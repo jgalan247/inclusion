@@ -376,21 +376,25 @@ PROTECTED CONTENT — DO NOT CHANGE:
 - Dates and specific numerical data
 
 ═══════════════════════════════════════════════════════════════════════════════
-OUTPUT REQUIREMENTS:
+OUTPUT REQUIREMENTS — CRITICAL:
 ═══════════════════════════════════════════════════════════════════════════════
 
-1. Your adapted version MUST be at least as long as the original — do NOT summarise or shorten.
+1. OUTPUT FULL PROSE, NOT BULLET POINTS: Write complete sentences and paragraphs. Do NOT convert the content into a summarised list of bullet points. The output should read like a proper educational resource, not notes.
 
-2. Structure your output exactly like the original (same sections, same order).
+2. MAINTAIN OR INCREASE LENGTH: Your adapted version MUST be at least as long as the original, often longer due to added scaffolding, explanations, and support. Do NOT summarise, shorten, or condense.
 
-3. Format your output as MARKDOWN with:
+3. PRESERVE FULL CONTENT: Include ALL questions, activities, instructions, and content from the original. Do not skip or merge items.
+
+4. STRUCTURE: Keep the same sections and order as the original. Use headings to organise.
+
+5. FORMAT AS MARKDOWN:
    - Headings using # and ##
-   - Bullet points using -
-   - Numbered lists using 1. 2. 3.
+   - Bullet points using - (only where appropriate, not for main content)
+   - Numbered lists using 1. 2. 3. (for questions and steps)
    - Bold text using **bold**
    - For maths use LaTeX: $x^2$ for inline, $$x^2$$ for display
 
-4. At the end, include a "CHANGES SUMMARY" section listing the main adaptations you made.
+6. At the end, include a "CHANGES SUMMARY" section listing the main adaptations you made.
 
 ═══════════════════════════════════════════════════════════════════════════════
 THE RESOURCE TO ADAPT:
