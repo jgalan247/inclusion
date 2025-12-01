@@ -339,11 +339,67 @@ const KEY_STAGE_DESCRIPTIONS = {
   ks5: 'Year 12-13 students (ages 16-18). A-Level. Use sophisticated academic language and expect higher-order thinking.',
 }
 
+// Output format specifications
+const OUTPUT_FORMAT_SPECS = {
+  worksheet: {
+    name: 'Worksheet',
+    instructions: `OUTPUT FORMAT: WORKSHEET (1-2 pages)
+- Create a structured worksheet with clear sections
+- Include 5-10 questions or activities
+- Add space indicators for student responses: [Write your answer here - 3 lines]
+- Include a learning objective at the top
+- Add success criteria or "I can..." statements`
+  },
+  full_lesson: {
+    name: 'Full Lesson Plan',
+    instructions: `OUTPUT FORMAT: FULL LESSON PLAN (3-5 pages)
+- Include a STARTER activity (5-10 minutes) with hook/engagement
+- Include MAIN ACTIVITIES (20-30 minutes) with differentiated tasks
+- Include a PLENARY (5-10 minutes) with review/assessment
+- Add timing for each section
+- Include teacher notes in [TEACHER NOTE: ...]
+- Add suggested resources and equipment needed
+- Include differentiation notes for different ability levels`
+  },
+  presentation: {
+    name: 'Presentation',
+    instructions: `OUTPUT FORMAT: PRESENTATION (5-10 slides)
+- Structure as individual slides using "## Slide 1: Title" format
+- Each slide should have a clear heading and 3-5 bullet points maximum
+- Include SPEAKER NOTES after each slide in [SPEAKER NOTES: ...]
+- Slide 1: Title slide with learning objective
+- Slides 2-3: Introduction/recap
+- Slides 4-7: Main content (one concept per slide)
+- Slides 8-9: Activities/practice
+- Slide 10: Plenary/summary
+- Keep text large and readable - minimal text per slide`
+  },
+  revision_guide: {
+    name: 'Revision Guide',
+    instructions: `OUTPUT FORMAT: REVISION GUIDE (2-3 pages)
+- Summarise KEY CONCEPTS clearly with definitions
+- Include WORKED EXAMPLES for each concept
+- Add REMEMBER boxes with key facts
+- Include COMMON MISTAKES to avoid
+- Add PRACTICE QUESTIONS at the end with answers
+- Use visual aids: diagrams, tables, flowcharts where helpful
+- Make it scannable with clear headings and bullet points`
+  },
+  same_as_original: {
+    name: 'Same as Original',
+    instructions: `OUTPUT FORMAT: MATCH ORIGINAL
+- Keep the same structure and format as the input resource
+- Maintain similar length (or longer with added scaffolding)
+- Preserve all sections in the same order`
+  }
+}
+
 // Generate the complete prompt
-export function generateAdaptPrompt(profile, resourceContent = '') {
+export function generateAdaptPrompt(profile, resourceContent = '', outputFormat = 'same_as_original') {
   const conditions = profile.conditions.map(c => CONDITION_PROMPTS[c]).filter(Boolean)
   const subjectVocab = SUBJECT_VOCABULARY[profile.subject] || ''
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
+  const formatSpec = OUTPUT_FORMAT_SPECS[outputFormat] || OUTPUT_FORMAT_SPECS.same_as_original
 
   let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in adapting educational resources for students with ${conditions.map(c => c.name).join(' and ')}.
 
@@ -379,22 +435,24 @@ PROTECTED CONTENT — DO NOT CHANGE:
 OUTPUT REQUIREMENTS — CRITICAL:
 ═══════════════════════════════════════════════════════════════════════════════
 
+${formatSpec.instructions}
+
+───────────────────────────────────────────────────────────────────────────────
+
 1. OUTPUT FULL PROSE, NOT BULLET POINTS: Write complete sentences and paragraphs. Do NOT convert the content into a summarised list of bullet points. The output should read like a proper educational resource, not notes.
 
 2. MAINTAIN OR INCREASE LENGTH: Your adapted version MUST be at least as long as the original, often longer due to added scaffolding, explanations, and support. Do NOT summarise, shorten, or condense.
 
 3. PRESERVE FULL CONTENT: Include ALL questions, activities, instructions, and content from the original. Do not skip or merge items.
 
-4. STRUCTURE: Keep the same sections and order as the original. Use headings to organise.
-
-5. FORMAT AS MARKDOWN:
+4. FORMAT AS MARKDOWN:
    - Headings using # and ##
    - Bullet points using - (only where appropriate, not for main content)
    - Numbered lists using 1. 2. 3. (for questions and steps)
    - Bold text using **bold**
    - For maths use LaTeX: $x^2$ for inline, $$x^2$$ for display
 
-6. At the end, include a "CHANGES SUMMARY" section listing the main adaptations you made.
+5. At the end, include a "CHANGES SUMMARY" section listing the main adaptations you made.
 
 ═══════════════════════════════════════════════════════════════════════════════
 THE RESOURCE TO ADAPT:

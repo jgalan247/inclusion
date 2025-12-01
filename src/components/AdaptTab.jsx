@@ -1,20 +1,29 @@
 import { useState } from 'react'
 import { generateAdaptPrompt } from '../utils/promptGenerator'
 
+const OUTPUT_FORMATS = [
+  { value: 'worksheet', label: 'Worksheet', description: '1-2 pages with questions and activities' },
+  { value: 'full_lesson', label: 'Full Lesson Plan', description: '3-5 pages with starter, main, plenary' },
+  { value: 'presentation', label: 'Presentation', description: '5-10 slides with speaker notes' },
+  { value: 'revision_guide', label: 'Revision Guide', description: '2-3 pages summarising key concepts' },
+  { value: 'same_as_original', label: 'Same as Original', description: 'Match the original format and length' },
+]
+
 function AdaptTab({ profile }) {
   const [step, setStep] = useState(1)
   const [resourceContent, setResourceContent] = useState('')
+  const [outputFormat, setOutputFormat] = useState('same_as_original')
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [copied, setCopied] = useState(false)
 
   const steps = [
     { num: 1, label: 'Paste Resource' },
-    { num: 2, label: 'Review Settings' },
+    { num: 2, label: 'Output Format' },
     { num: 3, label: 'Generate Prompt' },
   ]
 
   const handleGenerate = () => {
-    const prompt = generateAdaptPrompt(profile, resourceContent)
+    const prompt = generateAdaptPrompt(profile, resourceContent, outputFormat)
     setGeneratedPrompt(prompt)
     setStep(3)
   }
@@ -121,10 +130,41 @@ Question 2: Write three fractions equivalent to 1/2
               padding: '24px',
               marginBottom: '24px'
             }}>
-              <h3 style={{ marginBottom: '16px', fontFamily: 'var(--font-display)' }}>Review Your Settings</h3>
+              <h3 style={{ marginBottom: '16px', fontFamily: 'var(--font-display)' }}>Choose Output Format</h3>
               <p style={{ color: 'var(--color-text-light)' }}>
-                Check the settings below are correct. You can change them in the header above if needed.
+                Select the format you want for your adapted resource.
               </p>
+            </div>
+
+            <div className="form-group" style={{ marginBottom: '24px' }}>
+              <label className="form-label">Output Format</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {OUTPUT_FORMATS.map(format => (
+                  <label
+                    key={format.value}
+                    className={`radio-item ${outputFormat === format.value ? 'selected' : ''}`}
+                    style={{
+                      padding: '16px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: '4px'
+                    }}
+                    onClick={() => setOutputFormat(format.value)}
+                  >
+                    <input
+                      type="radio"
+                      name="outputFormat"
+                      checked={outputFormat === format.value}
+                      onChange={() => setOutputFormat(format.value)}
+                      style={{ display: 'none' }}
+                    />
+                    <span style={{ fontWeight: '600' }}>{format.label}</span>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{format.description}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             <div style={{
@@ -138,6 +178,9 @@ Question 2: Write three fractions equivalent to 1/2
               <p><strong>Condition(s):</strong> {profile.conditions.map(c => c.charAt(0).toUpperCase() + c.slice(1).replace('_', ' ')).join(', ')}</p>
               <p><strong>Subject:</strong> {profile.subject.charAt(0).toUpperCase() + profile.subject.slice(1)}</p>
               <p><strong>Key Stage:</strong> {profile.keyStage.toUpperCase()}</p>
+              <p style={{ marginTop: '8px', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+                Change these in the header above if needed.
+              </p>
             </div>
 
             <div style={{
@@ -151,13 +194,13 @@ Question 2: Write three fractions equivalent to 1/2
                 background: 'white',
                 borderRadius: '8px',
                 padding: '16px',
-                maxHeight: '200px',
+                maxHeight: '150px',
                 overflow: 'auto',
                 fontSize: '0.9rem',
                 whiteSpace: 'pre-wrap',
                 border: '1px solid var(--color-border)'
               }}>
-                {resourceContent.substring(0, 500)}{resourceContent.length > 500 ? '...' : ''}
+                {resourceContent.substring(0, 300)}{resourceContent.length > 300 ? '...' : ''}
               </div>
             </div>
 
@@ -210,6 +253,7 @@ Question 2: Write three fractions equivalent to 1/2
               <button className="btn btn-secondary" onClick={() => {
                 setStep(1)
                 setResourceContent('')
+                setOutputFormat('same_as_original')
                 setGeneratedPrompt('')
               }}>
                 Start New Adaptation
