@@ -452,7 +452,13 @@ ${formatSpec.instructions}
    - Bold text using **bold**
    - For maths use LaTeX: $x^2$ for inline, $$x^2$$ for display
 
-5. At the end, include a "CHANGES SUMMARY" section listing the main adaptations you made.
+5. At the end, include a detailed "## ADAPTATIONS MADE" section that explains:
+   - What specific changes were made for each condition (e.g., "For Autism: replaced 3 idioms with literal language, added explicit step-by-step instructions...")
+   - Why each adaptation helps the student
+   - Any formatting changes made (e.g., "Added visual spacing for ADHD", "Simplified sentence structure for Dyslexia")
+   - Suggestions for the teacher (e.g., "Consider printing on cream paper", "Allow extra time")
+
+   This section helps teachers understand the adaptations and learn for future resource creation.
 
 ═══════════════════════════════════════════════════════════════════════════════
 THE RESOURCE TO ADAPT:
