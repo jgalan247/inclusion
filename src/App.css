@@ -105,11 +105,10 @@ body {
 }
 
 .profile-section {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-lg);
   padding: var(--space-md) var(--space-lg);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .profile-label {

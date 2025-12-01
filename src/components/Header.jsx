@@ -80,18 +80,17 @@ function Header({ profile, updateProfile, addCondition, removeCondition }) {
                 </button>
                 {showAddCondition && (
                   <div style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
+                    position: 'fixed',
+                    top: 'auto',
+                    left: 'auto',
                     background: '#ffffff',
                     borderRadius: '8px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
                     padding: '8px',
-                    zIndex: 100,
+                    zIndex: 9999,
                     minWidth: '180px',
                     marginTop: '4px',
-                    backdropFilter: 'none',
-                    WebkitBackdropFilter: 'none'
+                    isolation: 'isolate'
                   }}>
                     {availableConditions.map(c => (
                       <div
@@ -105,10 +104,11 @@ function Header({ profile, updateProfile, addCondition, removeCondition }) {
                           cursor: 'pointer',
                           color: '#2c3e50',
                           borderRadius: '4px',
-                          fontSize: '0.9rem'
+                          fontSize: '0.9rem',
+                          background: '#ffffff'
                         }}
                         onMouseEnter={(e) => e.target.style.background = '#f0f0f0'}
-                        onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                        onMouseLeave={(e) => e.target.style.background = '#ffffff'}
                       >
                         {c.label}
                       </div>
