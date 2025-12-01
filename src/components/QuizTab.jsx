@@ -81,7 +81,8 @@ function QuizTab({ profile }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `quiz-prompt-${profile.subject}-${profile.keyStage}.txt`
+    const topicSlug = (options.sourceTopic || 'quiz').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30)
+    a.download = `quiz-${topicSlug}-${profile.subject}-${profile.keyStage}.txt`
     a.click()
     URL.revokeObjectURL(url)
   }

@@ -39,7 +39,8 @@ function AdaptTab({ profile }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `adapt-prompt-${profile.conditions.join('-')}-${profile.subject}-${profile.keyStage}.txt`
+    const timestamp = new Date().toISOString().slice(0, 10)
+    a.download = `adapt-${outputFormat}-${profile.conditions.join('-')}-${profile.subject}-${profile.keyStage}-${timestamp}.txt`
     a.click()
     URL.revokeObjectURL(url)
   }

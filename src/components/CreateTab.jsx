@@ -57,7 +57,8 @@ function CreateTab({ profile }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `create-prompt-${options.resourceType}-${profile.subject}-${profile.keyStage}.txt`
+    const topicSlug = (options.topic || 'resource').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30)
+    a.download = `create-${topicSlug}-${options.resourceType}-${profile.subject}-${profile.keyStage}.txt`
     a.click()
     URL.revokeObjectURL(url)
   }
