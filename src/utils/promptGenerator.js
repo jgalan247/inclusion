@@ -450,9 +450,21 @@ ${formatSpec.instructions}
    - Bullet points using - (only where appropriate, not for main content)
    - Numbered lists using 1. 2. 3. (for questions and steps)
    - Bold text using **bold**
-   - For maths use LaTeX: $x^2$ for inline, $$x^2$$ for display
 
-5. At the end, include a detailed "## ADAPTATIONS MADE" section that explains:
+5. MATHS NOTATION — USE LATEX/KATEX:
+   - Inline maths: $x^2 + y^2 = z^2$
+   - Display maths (centered, own line): $$\\frac{a}{b} = \\frac{c}{d}$$
+   - Fractions: $\\frac{1}{2}$, $\\frac{3}{4}$
+   - Powers: $x^2$, $x^{10}$
+   - Square roots: $\\sqrt{16}$, $\\sqrt{x+1}$
+   - Multiplication: $3 \\times 4$ (use \\times, not x)
+   - Division: $12 \\div 3$ (use \\div)
+   - Equals/inequalities: $=$, $\\neq$, $<$, $>$, $\\leq$, $\\geq$
+   - Pi: $\\pi$
+   - Angles: $90°$ or $90^\\circ$
+   - Example: "Calculate $\\frac{3}{4} + \\frac{1}{2}$" or "Find $x$ if $2x + 5 = 13$"
+
+6. At the end, include a detailed "## ADAPTATIONS MADE" section that explains:
    - What specific changes were made for each condition (e.g., "For Autism: replaced 3 idioms with literal language, added explicit step-by-step instructions...")
    - Why each adaptation helps the student
    - Any formatting changes made (e.g., "Added visual spacing for ADHD", "Simplified sentence structure for Dyslexia")
@@ -526,10 +538,16 @@ OUTPUT REQUIREMENTS:
    - Bullet points using -
    - Numbered lists using 1. 2. 3.
    - Bold text using **bold**
-   - For maths use LaTeX: $x^2$ for inline, $$x^2$$ for display
    - Tables using | column | format |
 
-4. Include:
+4. MATHS NOTATION — USE LATEX/KATEX:
+   - Inline maths: $x^2 + y^2 = z^2$
+   - Display maths (centered): $$\\frac{a}{b} = \\frac{c}{d}$$
+   - Fractions: $\\frac{1}{2}$, Powers: $x^2$, Roots: $\\sqrt{16}$
+   - Multiply: $3 \\times 4$, Divide: $12 \\div 3$
+   - Pi: $\\pi$, Angles: $90^\\circ$
+
+5. Include:
    - Clear learning objective at the top
    - Time estimates for each section
    - Success criteria or "What a good answer looks like"
@@ -667,13 +685,20 @@ _____________________________________________
 
 4. Include mark allocations: [1 mark], [2 marks], etc. after each question number.
 
+5. MATHS NOTATION — USE LATEX/KATEX:
+   - Inline maths: $x^2 + y^2 = z^2$
+   - Display maths (centered): $$\\frac{a}{b} = \\frac{c}{d}$$
+   - Fractions: $\\frac{1}{2}$, Powers: $x^2$, Roots: $\\sqrt{16}$
+   - Multiply: $3 \\times 4$, Divide: $12 \\div 3$
+   - Pi: $\\pi$, Angles: $90^\\circ$
+
 ${includeAnswers ? `
-5. INCLUDE ANSWERS at the end in a separate "## ANSWERS" section:
+6. INCLUDE ANSWERS at the end in a separate "## ANSWERS" section:
    - Show the correct answer for each question
    - For extended responses, include a model answer or mark scheme points
-` : '5. Do NOT include answers — this is for the student version.'}
+` : '6. Do NOT include answers — this is for the student version.'}
 
-6. At the end, include:
+7. At the end, include:
    - Total marks available
    - Suggested timing
    - Any equipment needed
