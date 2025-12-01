@@ -1,38 +1,17 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { generateAdaptPrompt } from '../utils/promptGenerator'
 
 function AdaptTab({ profile }) {
   const [step, setStep] = useState(1)
   const [resourceContent, setResourceContent] = useState('')
-  const [inputMethod, setInputMethod] = useState('text') // 'text' or 'file'
-  const [fileName, setFileName] = useState('')
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [copied, setCopied] = useState(false)
-  const fileInputRef = useRef(null)
 
   const steps = [
-    { num: 1, label: 'Input Resource' },
+    { num: 1, label: 'Paste Resource' },
     { num: 2, label: 'Review Settings' },
     { num: 3, label: 'Generate Prompt' },
   ]
-
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-
-    setFileName(file.name)
-    const extension = file.name.split('.').pop().toLowerCase()
-
-    if (extension === 'txt') {
-      const text = await file.text()
-      setResourceContent(text)
-    } else if (extension === 'pdf' || extension === 'docx' || extension === 'pptx') {
-      // For PDF, DOCX, PPTX - we'll show a message that content needs to be extracted
-      setResourceContent(`[Content from ${file.name} - Please copy and paste the text content from your ${extension.toUpperCase()} file, or use a tool to extract the text first]`)
-    } else {
-      setResourceContent(`[Unsupported file type: ${extension}. Please paste your content as plain text instead]`)
-    }
-  }
 
   const handleGenerate = () => {
     const prompt = generateAdaptPrompt(profile, resourceContent)
@@ -82,126 +61,46 @@ function AdaptTab({ profile }) {
       <div className="wizard-content">
         {step === 1 && (
           <div>
-            <h3 style={{ marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-              Enter Your Resource
-            </h3>
-            <p style={{ color: 'var(--color-text-light)', marginBottom: '24px' }}>
-              Provide the educational resource you want to adapt. You can either paste the text directly or upload a file.
-            </p>
+            <div style={{
+              background: 'linear-gradient(135deg, #e8f4f8 0%, #f0f7f4 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              marginBottom: '24px'
+            }}>
+              <h3 style={{ marginBottom: '16px', fontFamily: 'var(--font-display)' }}>How to Get Your Resource Text</h3>
+              <p style={{ marginBottom: '16px', color: 'var(--color-text-light)' }}>
+                Copy the text from your existing resource and paste it below:
+              </p>
+              <ul style={{ marginLeft: '20px', lineHeight: '1.8', color: 'var(--color-text-light)' }}>
+                <li><strong>Word document:</strong> Open in Word → Select All (Ctrl+A / Cmd+A) → Copy (Ctrl+C / Cmd+C)</li>
+                <li><strong>PDF:</strong> Open in browser or Adobe → Select text → Copy</li>
+                <li><strong>PowerPoint:</strong> Open slides → Copy text from each slide</li>
+                <li><strong>Google Docs/Slides:</strong> Select All → Copy</li>
+              </ul>
+            </div>
 
-            <div style={{ marginBottom: '24px' }}>
-              <div className="radio-group" style={{ marginBottom: '16px' }}>
-                <label
-                  className={`radio-item ${inputMethod === 'text' ? 'selected' : ''}`}
-                  onClick={() => setInputMethod('text')}
-                >
-                  <input
-                    type="radio"
-                    name="inputMethod"
-                    checked={inputMethod === 'text'}
-                    onChange={() => setInputMethod('text')}
-                  />
-                  ✏️ Paste Text
-                </label>
-                <label
-                  className={`radio-item ${inputMethod === 'file' ? 'selected' : ''}`}
-                  onClick={() => setInputMethod('file')}
-                >
-                  <input
-                    type="radio"
-                    name="inputMethod"
-                    checked={inputMethod === 'file'}
-                    onChange={() => setInputMethod('file')}
-                  />
-                  📁 Upload File
-                </label>
-              </div>
+            <div className="form-group">
+              <label className="form-label">Paste Your Resource Content</label>
+              <textarea
+                className="form-textarea"
+                placeholder="Paste your worksheet, lesson plan, or educational content here...
 
-              {inputMethod === 'text' && (
-                <div className="form-group">
-                  <label className="form-label">Resource Content</label>
-                  <textarea
-                    className="form-textarea"
-                    placeholder="Paste your worksheet, lesson plan, or educational content here..."
-                    value={resourceContent}
-                    onChange={(e) => setResourceContent(e.target.value)}
-                    style={{ minHeight: '250px' }}
-                  />
-                  <p className="form-hint">
-                    Tip: Include headings, questions, and instructions exactly as they appear in your resource.
-                  </p>
-                </div>
-              )}
+Example:
+# Worksheet: Fractions
+Learning Objective: To understand equivalent fractions
 
-              {inputMethod === 'file' && (
-                <div className="form-group">
-                  <label className="form-label">Upload Document</label>
-                  <div style={{
-                    border: '2px dashed var(--color-border)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: '40px',
-                    textAlign: 'center',
-                    background: 'var(--color-bg-warm)',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => fileInputRef.current?.click()}
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".txt,.pdf,.docx,.pptx"
-                      onChange={handleFileUpload}
-                      style={{ display: 'none' }}
-                    />
-                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>📄</div>
-                    <p style={{ fontWeight: '500', marginBottom: '8px' }}>
-                      {fileName || 'Click to upload or drag and drop'}
-                    </p>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                      Supported: TXT, PDF, DOCX, PPTX
-                    </p>
-                  </div>
+Question 1: What fraction is shaded?
+[Image of circle with 2/4 shaded]
 
-                  {fileName && (
-                    <div style={{
-                      marginTop: '16px',
-                      padding: '12px',
-                      background: '#e8f5e9',
-                      borderRadius: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}>
-                      <span>✅</span>
-                      <span>File selected: <strong>{fileName}</strong></span>
-                    </div>
-                  )}
-
-                  <div style={{
-                    marginTop: '16px',
-                    padding: '16px',
-                    background: '#fff9e6',
-                    borderRadius: '8px',
-                    border: '1px solid #f0e6cc'
-                  }}>
-                    <p style={{ fontSize: '0.9rem', color: '#8b6914' }}>
-                      <strong>Note:</strong> For PDF, DOCX, and PPTX files, please copy and paste the text content into the text area after uploading, or extract the text using your document viewer. Browser-based file reading has limitations with these formats.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {resourceContent && inputMethod === 'file' && (
-                <div className="form-group" style={{ marginTop: '16px' }}>
-                  <label className="form-label">Extracted/Pasted Content</label>
-                  <textarea
-                    className="form-textarea"
-                    value={resourceContent}
-                    onChange={(e) => setResourceContent(e.target.value)}
-                    style={{ minHeight: '200px' }}
-                  />
-                </div>
-              )}
+Question 2: Write three fractions equivalent to 1/2
+..."
+                value={resourceContent}
+                onChange={(e) => setResourceContent(e.target.value)}
+                style={{ minHeight: '300px' }}
+              />
+              <p className="form-hint">
+                Include headings, questions, and instructions exactly as they appear. The more detail you include, the better the adaptation will be.
+              </p>
             </div>
 
             <button
@@ -223,8 +122,8 @@ function AdaptTab({ profile }) {
               marginBottom: '24px'
             }}>
               <h3 style={{ marginBottom: '16px', fontFamily: 'var(--font-display)' }}>Review Your Settings</h3>
-              <p style={{ marginBottom: '16px', color: 'var(--color-text-light)' }}>
-                The prompt will be generated with these settings. Change them in the header if needed.
+              <p style={{ color: 'var(--color-text-light)' }}>
+                Check the settings below are correct. You can change them in the header above if needed.
               </p>
             </div>
 
@@ -236,7 +135,7 @@ function AdaptTab({ profile }) {
               marginBottom: '24px'
             }}>
               <h4 style={{ marginBottom: '12px', color: '#8b6914' }}>📋 Current Settings</h4>
-              <p><strong>Condition(s):</strong> {profile.conditions.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}</p>
+              <p><strong>Condition(s):</strong> {profile.conditions.map(c => c.charAt(0).toUpperCase() + c.slice(1).replace('_', ' ')).join(', ')}</p>
               <p><strong>Subject:</strong> {profile.subject.charAt(0).toUpperCase() + profile.subject.slice(1)}</p>
               <p><strong>Key Stage:</strong> {profile.keyStage.toUpperCase()}</p>
             </div>
@@ -247,7 +146,7 @@ function AdaptTab({ profile }) {
               padding: '20px',
               marginBottom: '24px'
             }}>
-              <h4 style={{ marginBottom: '12px' }}>📝 Resource Preview</h4>
+              <h4 style={{ marginBottom: '12px' }}>📝 Your Resource ({resourceContent.length} characters)</h4>
               <div style={{
                 background: 'white',
                 borderRadius: '8px',
@@ -260,9 +159,6 @@ function AdaptTab({ profile }) {
               }}>
                 {resourceContent.substring(0, 500)}{resourceContent.length > 500 ? '...' : ''}
               </div>
-              <p style={{ marginTop: '8px', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                {resourceContent.length} characters
-              </p>
             </div>
 
             <div style={{ display: 'flex', gap: '12px' }}>
@@ -299,10 +195,10 @@ function AdaptTab({ profile }) {
             <div className="next-steps">
               <h4>📝 What To Do Next</h4>
               <ol>
-                <li><strong>Copy</strong> the prompt above</li>
+                <li><strong>Copy</strong> the prompt above (it includes your resource)</li>
                 <li>Open <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">ChatGPT</a> or <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a></li>
                 <li><strong>Paste</strong> the prompt and press Enter</li>
-                <li>Wait for the adapted version</li>
+                <li>Wait for the AI to return your adapted resource</li>
                 <li>Copy the AI's response and use the <strong>Convert</strong> tab to create Word/PDF</li>
               </ol>
             </div>
@@ -314,7 +210,6 @@ function AdaptTab({ profile }) {
               <button className="btn btn-secondary" onClick={() => {
                 setStep(1)
                 setResourceContent('')
-                setFileName('')
                 setGeneratedPrompt('')
               }}>
                 Start New Adaptation
