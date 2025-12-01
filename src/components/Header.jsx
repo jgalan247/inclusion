@@ -83,13 +83,15 @@ function Header({ profile, updateProfile, addCondition, removeCondition }) {
                     position: 'absolute',
                     top: '100%',
                     left: 0,
-                    background: 'white',
+                    background: '#ffffff',
                     borderRadius: '8px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
                     padding: '8px',
                     zIndex: 100,
                     minWidth: '180px',
-                    marginTop: '4px'
+                    marginTop: '4px',
+                    backdropFilter: 'none',
+                    WebkitBackdropFilter: 'none'
                   }}>
                     {availableConditions.map(c => (
                       <div

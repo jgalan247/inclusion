@@ -340,7 +340,7 @@ const KEY_STAGE_DESCRIPTIONS = {
 }
 
 // Generate the complete prompt
-export function generateAdaptPrompt(profile, options = {}) {
+export function generateAdaptPrompt(profile, resourceContent = '') {
   const conditions = profile.conditions.map(c => CONDITION_PROMPTS[c]).filter(Boolean)
   const subjectVocab = SUBJECT_VOCABULARY[profile.subject] || ''
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
@@ -396,7 +396,7 @@ OUTPUT REQUIREMENTS:
 THE RESOURCE TO ADAPT:
 ═══════════════════════════════════════════════════════════════════════════════
 
-[PASTE YOUR RESOURCE HERE]
+${resourceContent || '[PASTE YOUR RESOURCE HERE]'}
 `
 
   return prompt
