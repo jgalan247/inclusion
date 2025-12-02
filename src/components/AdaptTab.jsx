@@ -5,6 +5,7 @@ const OUTPUT_FORMATS = [
   { value: 'worksheet', label: 'Worksheet', description: '1-2 pages with questions and activities' },
   { value: 'full_lesson', label: 'Full Lesson Plan', description: '3-5 pages with starter, main, plenary' },
   { value: 'presentation', label: 'Presentation', description: '5-10 slides with speaker notes' },
+  { value: 'handout', label: 'Handout (PDF)', description: '3-4 pages of theory, examples, and exercises' },
   { value: 'revision_guide', label: 'Revision Guide', description: '2-3 pages summarising key concepts' },
   { value: 'same_as_original', label: 'Same as Original', description: 'Match the original format and length' },
 ]

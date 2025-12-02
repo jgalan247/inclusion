@@ -374,6 +374,46 @@ const OUTPUT_FORMAT_SPECS = {
 - Slide 10: Plenary/summary
 - Keep text large and readable - minimal text per slide`
   },
+  handout: {
+    name: 'Handout (PDF)',
+    instructions: `OUTPUT FORMAT: HANDOUT / PDF (3-4 pages)
+
+Structure the handout with these sections:
+
+## 1. TITLE & INTRODUCTION
+- Clear title at the top
+- Learning objectives (2-3 bullet points)
+- Brief introduction explaining what students will learn (2-3 sentences)
+
+## 2. KEY CONCEPTS & THEORY
+- Explain the main concepts in detail with full paragraphs
+- Use clear headings for each concept
+- Include definitions in **bold** or in boxes
+- Add [IMAGE SUGGESTION: description of helpful diagram/visual]
+
+## 3. WORKED EXAMPLES
+- Provide 2-3 fully worked examples with step-by-step explanations
+- Show the thinking process, not just the answer
+- Use numbered steps: Step 1, Step 2, Step 3...
+- Include [IMAGE SUGGESTION: visual representation where helpful]
+
+## 4. GUIDED PRACTICE
+- 3-4 questions with hints or scaffolding
+- Partial solutions or sentence starters provided
+- Space for student answers: [Write your answer here - 3 lines]
+
+## 5. INDEPENDENT PRACTICE
+- 4-6 questions for students to try alone
+- Increasing difficulty
+- Include answer lines
+
+## 6. SUMMARY BOX
+- Key points to remember (bullet list)
+- Common mistakes to avoid
+- Extension challenge for early finishers
+
+Make this a comprehensive learning resource with substantial text content explaining the theory.`
+  },
   revision_guide: {
     name: 'Revision Guide',
     instructions: `OUTPUT FORMAT: REVISION GUIDE (2-3 pages)
