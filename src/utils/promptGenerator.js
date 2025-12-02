@@ -389,13 +389,13 @@ Structure the handout with these sections:
 - Explain the main concepts in detail with full paragraphs
 - Use clear headings for each concept
 - Include definitions in **bold** or in boxes
-- Add [IMAGE SUGGESTION: description of helpful diagram/visual]
+- Add image placeholders: 📷 **ADD IMAGE HERE:** [description]
 
 ## 3. WORKED EXAMPLES
 - Provide 2-3 fully worked examples with step-by-step explanations
 - Show the thinking process, not just the answer
 - Use numbered steps: Step 1, Step 2, Step 3...
-- Include [IMAGE SUGGESTION: visual representation where helpful]
+- Include image placeholders where visuals help: 📷 **ADD IMAGE HERE:** [description]
 
 ## 4. GUIDED PRACTICE
 - 3-4 questions with hints or scaffolding
@@ -504,7 +504,19 @@ ${formatSpec.instructions}
    - Angles: $90°$ or $90^\\circ$
    - Example: "Calculate $\\frac{3}{4} + \\frac{1}{2}$" or "Find $x$ if $2x + 5 = 13$"
 
-6. At the end, include a detailed "## ADAPTATIONS MADE" section that explains:
+6. IMAGE PLACEHOLDERS — Where a visual would help understanding, insert:
+
+   📷 **ADD IMAGE HERE:** [Clear description of what image to add]
+
+   Examples:
+   - 📷 **ADD IMAGE HERE:** A pizza divided into 8 equal slices with 3 slices shaded to represent 3/8
+   - 📷 **ADD IMAGE HERE:** A labelled diagram of the water cycle showing evaporation, condensation, and precipitation
+   - 📷 **ADD IMAGE HERE:** A number line from 0 to 1 with fractions marked at 1/4, 1/2, and 3/4
+   - 📷 **ADD IMAGE HERE:** Portrait of Macbeth looking troubled (search "Macbeth illustration")
+
+   Include image placeholders where they would genuinely aid learning, especially for visual learners.
+
+7. At the end, include a detailed "## ADAPTATIONS MADE" section that explains:
    - What specific changes were made for each condition (e.g., "For Autism: replaced 3 idioms with literal language, added explicit step-by-step instructions...")
    - Why each adaptation helps the student
    - Any formatting changes made (e.g., "Added visual spacing for ADHD", "Simplified sentence structure for Dyslexia")
@@ -592,6 +604,10 @@ OUTPUT REQUIREMENTS:
    - Time estimates for each section
    - Success criteria or "What a good answer looks like"
    - Any teacher notes in [TEACHER NOTE: ...]
+
+6. IMAGE PLACEHOLDERS — Where a visual would help, insert:
+   📷 **ADD IMAGE HERE:** [Clear description of what image to add]
+   Example: 📷 **ADD IMAGE HERE:** A diagram showing the parts of a plant cell
 
 ═══════════════════════════════════════════════════════════════════════════════
 `
@@ -738,7 +754,10 @@ ${includeAnswers ? `
    - For extended responses, include a model answer or mark scheme points
 ` : '6. Do NOT include answers — this is for the student version.'}
 
-7. At the end, include:
+7. IMAGE PLACEHOLDERS — Where a visual would help (e.g., diagrams for questions), insert:
+   📷 **ADD IMAGE HERE:** [Clear description of what image to add]
+
+8. At the end, include:
    - Total marks available
    - Suggested timing
    - Any equipment needed
