@@ -34,7 +34,7 @@ const KEY_STAGES = [
   { value: 'ks5', label: 'KS5 (16-18)' },
 ]
 
-function Header({ profile, updateProfile, addCondition, removeCondition }) {
+function Header({ profile, updateProfile, addCondition, removeCondition, presets, showPresets, setShowPresets, applyPreset }) {
   const [showAddCondition, setShowAddCondition] = useState(false)
 
   const availableConditions = CONDITIONS.filter(
@@ -55,6 +55,64 @@ function Header({ profile, updateProfile, addCondition, removeCondition }) {
             <span className="logo-tagline">Prompt Generator for Inclusive Education</span>
           </div>
         </div>
+
+        {/* Quick Presets Button */}
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => setShowPresets(!showPresets)}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '20px',
+              border: '2px solid rgba(255,255,255,0.3)',
+              background: 'rgba(255,255,255,0.1)',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: '0.85rem',
+              fontWeight: '500',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            ⚡ Quick Presets
+          </button>
+          {showPresets && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              background: '#ffffff',
+              borderRadius: '8px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+              padding: '8px',
+              zIndex: 9999,
+              minWidth: '220px',
+              marginTop: '8px'
+            }}>
+              <div style={{ padding: '8px 12px', fontSize: '0.75rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Quick Setup
+              </div>
+              {presets.map((preset, i) => (
+                <div
+                  key={i}
+                  onClick={() => applyPreset(preset)}
+                  style={{
+                    padding: '10px 12px',
+                    cursor: 'pointer',
+                    color: '#2c3e50',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    background: '#ffffff'
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = '#f0f0f0'}
+                  onMouseLeave={(e) => e.target.style.background = '#ffffff'}
+                >
+                  {preset.name}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="profile-section">
@@ -72,7 +130,7 @@ function Header({ profile, updateProfile, addCondition, removeCondition }) {
             ))}
             {profile.conditions.length < 3 && (
               <div style={{ position: 'relative' }}>
-                <button 
+                <button
                   className="add-condition-btn"
                   onClick={() => setShowAddCondition(!showAddCondition)}
                 >

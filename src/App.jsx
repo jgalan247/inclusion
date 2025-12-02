@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import TabNavigation from './components/TabNavigation'
@@ -7,13 +7,34 @@ import CreateTab from './components/CreateTab'
 import QuizTab from './components/QuizTab'
 import ConvertTab from './components/ConvertTab'
 
+// Quick presets for common setups
+const PRESETS = [
+  { name: 'Autism - English KS3', conditions: ['autism'], subject: 'english', keyStage: 'ks3' },
+  { name: 'ADHD - Maths KS2', conditions: ['adhd'], subject: 'maths', keyStage: 'ks2' },
+  { name: 'Dyslexia - English KS2', conditions: ['dyslexia'], subject: 'english', keyStage: 'ks2' },
+  { name: 'Autism + ADHD - Science KS3', conditions: ['autism', 'adhd'], subject: 'science', keyStage: 'ks3' },
+  { name: 'EAL - History KS3', conditions: ['eal'], subject: 'history', keyStage: 'ks3' },
+]
+
+const DEFAULT_PROFILE = {
+  conditions: ['autism'],
+  subject: 'english',
+  keyStage: 'ks3'
+}
+
 function App() {
   const [activeTab, setActiveTab] = useState('adapt')
-  const [profile, setProfile] = useState({
-    conditions: ['autism'],
-    subject: 'english',
-    keyStage: 'ks3'
+  const [profile, setProfile] = useState(() => {
+    // Load from localStorage on initial render
+    const saved = localStorage.getItem('adaptedProfile')
+    return saved ? JSON.parse(saved) : DEFAULT_PROFILE
   })
+  const [showPresets, setShowPresets] = useState(false)
+
+  // Save to localStorage whenever profile changes
+  useEffect(() => {
+    localStorage.setItem('adaptedProfile', JSON.stringify(profile))
+  }, [profile])
 
   const updateProfile = (field, value) => {
     setProfile(prev => ({ ...prev, [field]: value }))
@@ -27,20 +48,33 @@ function App() {
 
   const removeCondition = (condition) => {
     if (profile.conditions.length > 1) {
-      setProfile(prev => ({ 
-        ...prev, 
-        conditions: prev.conditions.filter(c => c !== condition) 
+      setProfile(prev => ({
+        ...prev,
+        conditions: prev.conditions.filter(c => c !== condition)
       }))
     }
   }
 
+  const applyPreset = (preset) => {
+    setProfile({
+      conditions: preset.conditions,
+      subject: preset.subject,
+      keyStage: preset.keyStage
+    })
+    setShowPresets(false)
+  }
+
   return (
     <div className="app">
-      <Header 
+      <Header
         profile={profile}
         updateProfile={updateProfile}
         addCondition={addCondition}
         removeCondition={removeCondition}
+        presets={PRESETS}
+        showPresets={showPresets}
+        setShowPresets={setShowPresets}
+        applyPreset={applyPreset}
       />
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
       <main className="main-content">
