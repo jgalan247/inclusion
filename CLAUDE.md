@@ -10,7 +10,7 @@ AdaptEd is a React web application that generates AI prompts to help teachers an
 
 ```bash
 npm run dev      # Start Vite dev server with HMR
-npm run build    # Production build to /dist (GitHub Pages base path: /adapted/)
+npm run build    # Production build to /dist (DigitalOcean App Platform, base path: /)
 npm run lint     # ESLint on .js/.jsx files
 npm run preview  # Preview production build
 ```
@@ -19,34 +19,38 @@ npm run preview  # Preview production build
 
 ### Core Data Flow
 - `App.jsx` manages a centralized `profile` object: `{ conditions: [], subject: '', keyStage: '' }`
+- Profile persists to localStorage (`adaptedProfile` key) and reloads on refresh
 - Profile is passed down to all tab components
-- Each tab uses the profile to generate context-aware prompts
+- Maximum 3 conditions can be selected at once
 
 ### Tab Components (src/components/)
-- **AdaptTab**: Wizard for adapting existing resources
+- **AdaptTab**: Single-page form for adapting existing resources with output format selection
 - **CreateTab**: Wizard for creating new resources from scratch
-- **QuizTab**: Wizard for generating assessments
-- **ConvertTab**: Markdown-to-Word/PDF converter with accessibility styling
+- **QuizTab**: Wizard for generating assessments with question type selection
+- **ConvertTab**: Markdown-to-Word/PDF converter with accessibility styling (dyslexic font, cream background, large text, extra spacing)
 
 ### Prompt Generation (src/utils/promptGenerator.js)
-Core business logic file containing:
-- `CONDITION_PROMPTS`: Rules for 9 conditions (Autism, ADHD, Dyslexia, etc.) with Bad/Good examples
-- `SUBJECT_VOCABULARY`: Protected technical terms per subject
-- `KEY_STAGE_DESCRIPTIONS`: Age-appropriate guidance (KS1-KS5)
+Core business logic file (~770 lines) containing:
+- `CONDITION_PROMPTS`: Rules for 9 conditions (Autism, ADHD, Dyslexia, Dyscalculia, Anxiety, Visual Processing, Working Memory, Slow Processing, EAL) with ✗ Bad / ✓ Good examples
+- `SUBJECT_VOCABULARY`: Protected technical terms per subject (english, maths, science, history, geography, computing)
+- `KEY_STAGE_DESCRIPTIONS`: UK age-appropriate guidance (KS1-KS5)
+- `OUTPUT_FORMAT_SPECS`: Templates for worksheet, full_lesson, presentation, handout, revision_guide
 - Export functions: `generateAdaptPrompt()`, `generateCreatePrompt()`, `generateQuizPrompt()`
 
-### Component Patterns
-- Step-based wizard UI with progress indicators
-- Local useState hooks for wizard state per tab
-- Markdown rendering via Marked.js with KaTeX for LaTeX math
+### Math Rendering
+ConvertTab uses custom `renderMath()` function to parse LaTeX:
+- Display math: `$$...$$` (centered, own line)
+- Inline math: `$...$`
+- Prompts instruct AI to use LaTeX notation (e.g., `$\frac{1}{2}$`, `$x^2$`, `$\sqrt{16}$`)
 
 ## Key Technologies
 - React 19 + Vite 7
 - Marked (markdown) + KaTeX (math rendering)
-- docx + html2pdf.js (document export)
+- file-saver + docx (Word export via HTML)
 - Pure CSS with custom properties (no UI framework)
 
 ## Extending the System
-- **New conditions**: Add to `CONDITION_PROMPTS` object in promptGenerator.js
-- **New subjects**: Add to `SUBJECT_VOCABULARY` object
-- **New key stages**: Add to `KEY_STAGES` array and `KEY_STAGE_DESCRIPTIONS` object
+- **New conditions**: Add to `CONDITION_PROMPTS` object in promptGenerator.js with `name` and `rules` (use ✗/✓ format for examples)
+- **New subjects**: Add to `SUBJECT_VOCABULARY` object with comma-separated technical terms
+- **New key stages**: Add to `KEY_STAGE_DESCRIPTIONS` object
+- **New output formats**: Add to `OUTPUT_FORMAT_SPECS` object with `name` and `instructions`
