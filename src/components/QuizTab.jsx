@@ -20,10 +20,11 @@ const DIFFICULTIES = [
 const EXAM_BOARDS = [
   { value: '', label: 'No specific board' },
   { value: 'aqa', label: 'AQA' },
+  { value: 'ccea', label: 'CCEA' },
   { value: 'edexcel', label: 'Edexcel' },
+  { value: 'eduqas', label: 'Eduqas' },
   { value: 'ocr', label: 'OCR' },
   { value: 'wjec', label: 'WJEC' },
-  { value: 'eduqas', label: 'Eduqas' },
 ]
 
 function QuizTab({ profile }) {
