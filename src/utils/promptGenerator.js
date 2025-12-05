@@ -476,10 +476,10 @@ FORMATTING RULES:
 1. Write full prose, not bullet summaries. Maintain or increase length.
 2. Preserve ALL original content — do not skip or merge items.
 3. Use Markdown: # headings, **bold**, numbered lists, tables where helpful.
-4. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.
-5. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).
-6. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
-7. End with "## ADAPTATIONS MADE" — list changes per condition and teacher tips.
+4. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${['maths', 'science', 'computing'].includes(profile.subject) ? `
+5. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+${['maths', 'science', 'computing'].includes(profile.subject) ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+${['maths', 'science', 'computing'].includes(profile.subject) ? '7' : '6'}. End with "## ADAPTATIONS MADE" — list changes per condition and teacher tips.
 
 ═══════════════════════════════════════════════════════════════════════════════
 THE RESOURCE TO ADAPT:
@@ -528,6 +528,8 @@ DESIGN REQUIREMENTS — BUILD THESE IN FROM THE START:
     prompt += condition.rules + '\n'
   })
 
+  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
+
   prompt += `
 ───────────────────────────────────────────────────────────────────────────────
 
@@ -536,10 +538,10 @@ SUBJECT VOCABULARY: ${subjectVocab}
 OUTPUT REQUIREMENTS:
 1. Create COMPLETE resource (500+ words worksheet, 800+ full lesson), not just an outline.
 2. Use Markdown: # headings, **bold**, numbered lists, tables for structured data.
-3. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.
-4. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).
-5. Include: learning objective, time estimates, success criteria, [TEACHER NOTE: ...].
-6. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+3. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${needsMaths ? `
+4. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+${needsMaths ? '5' : '4'}. Include: learning objective, time estimates, success criteria, [TEACHER NOTE: ...].
+${needsMaths ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
 `
 
   return prompt
@@ -588,6 +590,8 @@ ACCESSIBILITY REQUIREMENTS — APPLY TO ALL QUESTIONS:
     prompt += condition.rules + '\n'
   })
 
+  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
+
   prompt += `
 ═══════════════════════════════════════════════════════════════════════════════
 OUTPUT REQUIREMENTS:
@@ -597,11 +601,11 @@ OUTPUT REQUIREMENTS:
 2. Format: **Question N** [X marks], then question, then answer space (underscores) or ☐ options.
 3. Separate questions with --- horizontal rules.
 4. Multiple choice: each option on its own line with ☐ checkbox.
-5. Use tables for matching questions and mark schemes.
-6. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).
-7. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
-${includeAnswers ? `8. Include "## ANSWERS" section at the end with correct answers and mark scheme.` : '8. Do NOT include answers — student version only.'}
-9. End with: total marks, suggested timing, equipment needed.
+5. Use tables for matching questions and mark schemes.${needsMaths ? `
+6. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+${needsMaths ? '7' : '6'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+${includeAnswers ? `${needsMaths ? '8' : '7'}. Include "## ANSWERS" section at the end with correct answers and mark scheme.` : `${needsMaths ? '8' : '7'}. Do NOT include answers — student version only.`}
+${needsMaths ? '9' : '8'}. End with: total marks, suggested timing, equipment needed.
 `
 
   return prompt
