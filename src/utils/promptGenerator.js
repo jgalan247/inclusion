@@ -448,9 +448,7 @@ Adapt the ${profile.keyStage.toUpperCase()} ${profile.subject} resource provided
 
 KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
 
-═══════════════════════════════════════════════════════════════════════════════
-ADAPTATION RULES — APPLY ALL OF THESE:
-═══════════════════════════════════════════════════════════════════════════════
+ADAPTATION RULES:
 `
 
   // Add condition-specific rules
@@ -458,33 +456,25 @@ ADAPTATION RULES — APPLY ALL OF THESE:
     prompt += condition.rules + '\n'
   })
 
-  // Add protected vocabulary
-  prompt += `
-───────────────────────────────────────────────────────────────────────────────
+  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
+  // Add protected vocabulary and output requirements
+  prompt += `
 PROTECTED (DO NOT SIMPLIFY): ${subjectVocab}, direct quotes, formulas, exam command words, proper nouns, dates.
 
-═══════════════════════════════════════════════════════════════════════════════
 OUTPUT FORMAT:
-═══════════════════════════════════════════════════════════════════════════════
-
 ${formatSpec.instructions}
 
-───────────────────────────────────────────────────────────────────────────────
-
-FORMATTING RULES:
+FORMATTING:
 1. Write full prose, not bullet summaries. Maintain or increase length.
 2. Preserve ALL original content — do not skip or merge items.
 3. Use Markdown: # headings, **bold**, numbered lists, tables where helpful.
-4. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${['maths', 'science', 'computing'].includes(profile.subject) ? `
+4. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${needsMaths ? `
 5. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
-${['maths', 'science', 'computing'].includes(profile.subject) ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
-${['maths', 'science', 'computing'].includes(profile.subject) ? '7' : '6'}. End with "## ADAPTATIONS MADE" — list changes per condition and teacher tips.
+${needsMaths ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+${needsMaths ? '7' : '6'}. End with "## ADAPTATIONS MADE" — list changes per condition and teacher tips.
 
-═══════════════════════════════════════════════════════════════════════════════
-THE RESOURCE TO ADAPT:
-═══════════════════════════════════════════════════════════════════════════════
-
+RESOURCE TO ADAPT:
 ${resourceContent || '[PASTE YOUR RESOURCE HERE]'}
 `
 
@@ -516,12 +506,9 @@ RESOURCE TYPE: ${resourceType}
 DURATION: ${duration || '40'} minutes
 KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
 
-STRUCTURE TO INCLUDE:
-${structure.map((s, i) => `${i + 1}. ${s}`).join('\n')}
+STRUCTURE: ${structure.map((s, i) => `${i + 1}. ${s}`).join(', ')}
 
-═══════════════════════════════════════════════════════════════════════════════
-DESIGN REQUIREMENTS — BUILD THESE IN FROM THE START:
-═══════════════════════════════════════════════════════════════════════════════
+DESIGN REQUIREMENTS:
 `
 
   conditions.forEach(condition => {
@@ -531,15 +518,13 @@ DESIGN REQUIREMENTS — BUILD THESE IN FROM THE START:
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   prompt += `
-───────────────────────────────────────────────────────────────────────────────
-
 SUBJECT VOCABULARY: ${subjectVocab}
 
-OUTPUT REQUIREMENTS:
-1. Create COMPLETE resource (500+ words worksheet, 800+ full lesson), not just an outline.
+OUTPUT:
+1. Create COMPLETE resource (500+ words worksheet, 800+ full lesson), not an outline.
 2. Use Markdown: # headings, **bold**, numbered lists, tables for structured data.
 3. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${needsMaths ? `
-4. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+4. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
 ${needsMaths ? '5' : '4'}. Include: learning objective, time estimates, success criteria, [TEACHER NOTE: ...].
 ${needsMaths ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
 `
@@ -578,12 +563,9 @@ DIFFICULTY: ${difficulty || 'medium'}
 KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
 ${examBoard && ['ks4', 'ks5'].includes(profile.keyStage) ? `EXAM BOARD STYLE: ${examBoard}` : ''}
 
-QUESTION TYPES TO INCLUDE:
-   - ${selectedTypes}
+QUESTION TYPES: ${selectedTypes.replace(/\n   - /g, ', ')}
 
-═══════════════════════════════════════════════════════════════════════════════
-ACCESSIBILITY REQUIREMENTS — APPLY TO ALL QUESTIONS:
-═══════════════════════════════════════════════════════════════════════════════
+ACCESSIBILITY REQUIREMENTS:
 `
 
   conditions.forEach(condition => {
@@ -593,18 +575,15 @@ ACCESSIBILITY REQUIREMENTS — APPLY TO ALL QUESTIONS:
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   prompt += `
-═══════════════════════════════════════════════════════════════════════════════
-OUTPUT REQUIREMENTS:
-═══════════════════════════════════════════════════════════════════════════════
-
+OUTPUT:
 1. Create EXACTLY ${questionCount || 10} questions.
 2. Format: **Question N** [X marks], then question, then answer space (underscores) or ☐ options.
 3. Separate questions with --- horizontal rules.
 4. Multiple choice: each option on its own line with ☐ checkbox.
 5. Use tables for matching questions and mark schemes.${needsMaths ? `
-6. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+6. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
 ${needsMaths ? '7' : '6'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
-${includeAnswers ? `${needsMaths ? '8' : '7'}. Include "## ANSWERS" section at the end with correct answers and mark scheme.` : `${needsMaths ? '8' : '7'}. Do NOT include answers — student version only.`}
+${includeAnswers ? `${needsMaths ? '8' : '7'}. Include "## ANSWERS" section with correct answers and mark scheme.` : `${needsMaths ? '8' : '7'}. Do NOT include answers — student version only.`}
 ${needsMaths ? '9' : '8'}. End with: total marks, suggested timing, equipment needed.
 `
 
