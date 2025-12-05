@@ -462,88 +462,24 @@ ADAPTATION RULES — APPLY ALL OF THESE:
   prompt += `
 ───────────────────────────────────────────────────────────────────────────────
 
-PROTECTED CONTENT — DO NOT CHANGE:
-- Subject-specific technical vocabulary: ${subjectVocab}
-- Direct quotations from source texts (keep exactly as written)
-- Mathematical notation and formulas
-- Code syntax and programming terms
-- Exam command words: Analyse, Evaluate, Compare, Contrast, Explain, Describe, Assess, Justify
-- Proper nouns, names, and titles
-- Dates and specific numerical data
+PROTECTED (DO NOT SIMPLIFY): ${subjectVocab}, direct quotes, formulas, exam command words, proper nouns, dates.
 
 ═══════════════════════════════════════════════════════════════════════════════
-OUTPUT REQUIREMENTS — CRITICAL:
+OUTPUT FORMAT:
 ═══════════════════════════════════════════════════════════════════════════════
 
 ${formatSpec.instructions}
 
 ───────────────────────────────────────────────────────────────────────────────
 
-1. OUTPUT FULL PROSE, NOT BULLET POINTS: Write complete sentences and paragraphs. Do NOT convert the content into a summarised list of bullet points. The output should read like a proper educational resource, not notes.
-
-2. MAINTAIN OR INCREASE LENGTH: Your adapted version MUST be at least as long as the original, often longer due to added scaffolding, explanations, and support. Do NOT summarise, shorten, or condense.
-
-3. PRESERVE FULL CONTENT: Include ALL questions, activities, instructions, and content from the original. Do not skip or merge items.
-
-4. FORMAT AS MARKDOWN:
-   - Headings using # and ##
-   - Bullet points using - (only where appropriate, not for main content)
-   - Numbered lists using 1. 2. 3. (for questions and steps)
-   - Bold text using **bold**
-   - Tables using | column | format | for structured data
-
-5. USE TABLES TO IMPROVE CLARITY — Convert content to tables when it helps comprehension:
-   - Vocabulary lists (word | definition | example sentence)
-   - Comparisons (feature | option A | option B)
-   - Sequences/processes (step | action | purpose)
-   - Schedules/timings (time | activity | resources needed)
-   - Mark schemes/rubrics (criteria | marks | description)
-   - Character/concept summaries (name | role | key facts)
-
-   Tables are especially helpful for students with Autism (predictable structure), ADHD (scannable, less overwhelming), Working Memory difficulties (all information visible), and Dyslexia (reduces dense text).
-
-   Example — instead of:
-   "Macbeth is the main character who becomes king. Lady Macbeth is his wife who encourages him. Banquo is his friend who suspects him."
-
-   Use:
-   | Character | Role | Key Information |
-   |-----------|------|-----------------|
-   | Macbeth | Main character | Becomes king |
-   | Lady Macbeth | His wife | Encourages him |
-   | Banquo | His friend | Suspects him |
-
-6. MATHS NOTATION — USE LATEX/KATEX:
-   - Inline maths: $x^2 + y^2 = z^2$
-   - Display maths (centered, own line): $$\\frac{a}{b} = \\frac{c}{d}$$
-   - Fractions: $\\frac{1}{2}$, $\\frac{3}{4}$
-   - Powers: $x^2$, $x^{10}$
-   - Square roots: $\\sqrt{16}$, $\\sqrt{x+1}$
-   - Multiplication: $3 \\times 4$ (use \\times, not x)
-   - Division: $12 \\div 3$ (use \\div)
-   - Equals/inequalities: $=$, $\\neq$, $<$, $>$, $\\leq$, $\\geq$
-   - Pi: $\\pi$
-   - Angles: $90°$ or $90^\\circ$
-   - Example: "Calculate $\\frac{3}{4} + \\frac{1}{2}$" or "Find $x$ if $2x + 5 = 13$"
-
-7. IMAGE PLACEHOLDERS — Where a visual would help understanding, insert:
-
-   📷 **ADD IMAGE HERE:** [Clear description of what image to add]
-
-   Examples:
-   - 📷 **ADD IMAGE HERE:** A pizza divided into 8 equal slices with 3 slices shaded to represent 3/8
-   - 📷 **ADD IMAGE HERE:** A labelled diagram of the water cycle showing evaporation, condensation, and precipitation
-   - 📷 **ADD IMAGE HERE:** A number line from 0 to 1 with fractions marked at 1/4, 1/2, and 3/4
-   - 📷 **ADD IMAGE HERE:** Portrait of Macbeth looking troubled (search "Macbeth illustration")
-
-   Include image placeholders where they would genuinely aid learning, especially for visual learners.
-
-8. At the end, include a detailed "## ADAPTATIONS MADE" section that explains:
-   - What specific changes were made for each condition (e.g., "For Autism: replaced 3 idioms with literal language, added explicit step-by-step instructions...")
-   - Why each adaptation helps the student
-   - Any formatting changes made (e.g., "Added visual spacing for ADHD", "Simplified sentence structure for Dyslexia")
-   - Suggestions for the teacher (e.g., "Consider printing on cream paper", "Allow extra time")
-
-   This section helps teachers understand the adaptations and learn for future resource creation.
+FORMATTING RULES:
+1. Write full prose, not bullet summaries. Maintain or increase length.
+2. Preserve ALL original content — do not skip or merge items.
+3. Use Markdown: # headings, **bold**, numbered lists, tables where helpful.
+4. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.
+5. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).
+6. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+7. End with "## ADAPTATIONS MADE" — list changes per condition and teacher tips.
 
 ═══════════════════════════════════════════════════════════════════════════════
 THE RESOURCE TO ADAPT:
@@ -595,51 +531,15 @@ DESIGN REQUIREMENTS — BUILD THESE IN FROM THE START:
   prompt += `
 ───────────────────────────────────────────────────────────────────────────────
 
-SUBJECT VOCABULARY TO USE CORRECTLY:
-${subjectVocab}
+SUBJECT VOCABULARY: ${subjectVocab}
 
-═══════════════════════════════════════════════════════════════════════════════
 OUTPUT REQUIREMENTS:
-═══════════════════════════════════════════════════════════════════════════════
-
-1. Create a COMPLETE resource, not just an outline. Include actual content, questions, and activities.
-
-2. Length: At least 500 words for a worksheet, 800+ words for a full lesson.
-
-3. Format your output as MARKDOWN with:
-   - Clear headings using # and ##
-   - Bullet points using -
-   - Numbered lists using 1. 2. 3.
-   - Bold text using **bold**
-   - Tables using | column | format | for structured data
-
-4. USE TABLES TO IMPROVE CLARITY — Use tables when they help comprehension:
-   - Vocabulary lists (word | definition | example)
-   - Comparisons (feature | option A | option B)
-   - Sequences/processes (step | action | purpose)
-   - Schedules/timings (time | activity)
-   - Mark schemes (criteria | marks | description)
-
-   Tables help students with Autism (predictable structure), ADHD (scannable), Working Memory difficulties (all info visible), and Dyslexia (reduces dense text).
-
-5. MATHS NOTATION — USE LATEX/KATEX:
-   - Inline maths: $x^2 + y^2 = z^2$
-   - Display maths (centered): $$\\frac{a}{b} = \\frac{c}{d}$$
-   - Fractions: $\\frac{1}{2}$, Powers: $x^2$, Roots: $\\sqrt{16}$
-   - Multiply: $3 \\times 4$, Divide: $12 \\div 3$
-   - Pi: $\\pi$, Angles: $90^\\circ$
-
-6. Include:
-   - Clear learning objective at the top
-   - Time estimates for each section
-   - Success criteria or "What a good answer looks like"
-   - Any teacher notes in [TEACHER NOTE: ...]
-
-7. IMAGE PLACEHOLDERS — Where a visual would help, insert:
-   📷 **ADD IMAGE HERE:** [Clear description of what image to add]
-   Example: 📷 **ADD IMAGE HERE:** A diagram showing the parts of a plant cell
-
-═══════════════════════════════════════════════════════════════════════════════
+1. Create COMPLETE resource (500+ words worksheet, 800+ full lesson), not just an outline.
+2. Use Markdown: # headings, **bold**, numbered lists, tables for structured data.
+3. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.
+4. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).
+5. Include: learning objective, time estimates, success criteria, [TEACHER NOTE: ...].
+6. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
 `
 
   return prompt
@@ -690,116 +590,18 @@ ACCESSIBILITY REQUIREMENTS — APPLY TO ALL QUESTIONS:
 
   prompt += `
 ═══════════════════════════════════════════════════════════════════════════════
-OUTPUT REQUIREMENTS — FORMATTING IS CRITICAL:
+OUTPUT REQUIREMENTS:
 ═══════════════════════════════════════════════════════════════════════════════
 
 1. Create EXACTLY ${questionCount || 10} questions.
-
-2. USE CLEAR VISUAL LAYOUT FOR EACH QUESTION TYPE:
-
-**MULTIPLE CHOICE FORMAT:**
----
-**Question 1** [1 mark]
-
-What atmosphere is created by the witches in Act 1 Scene 1?
-
-☐ A) Happy and calm
-
-☐ B) Strange and unsettling
-
-☐ C) Busy and crowded
-
-☐ D) Bright and hopeful
-
----
-
-**SHORT ANSWER FORMAT:**
----
-**Question 2** [2 marks]
-
-How does Macbeth earn the title Thane of Cawdor in Act 1?
-
-**Your answer:**
-_____________________________________________
-_____________________________________________
-
----
-
-**FILL IN THE BLANK FORMAT:**
----
-**Question 3** [1 mark]
-
-Complete the sentence:
-
-The witches tell Macbeth he will become **_______________** after being Thane of Cawdor.
-
----
-
-**TRUE/FALSE FORMAT:**
----
-**Question 4** [1 mark]
-
-True or False: Banquo fully believes the witches' prophecies.
-
-☐ True    ☐ False
-
----
-
-**EXTENDED RESPONSE FORMAT:**
----
-**Question 5** [4 marks]
-
-Explain how Lady Macbeth influences Macbeth's decision. Use evidence from the text.
-
-**Your answer:**
-_____________________________________________
-_____________________________________________
-_____________________________________________
-_____________________________________________
-_____________________________________________
-
----
-
-3. FORMATTING RULES:
-   - Use horizontal rules (---) to separate each question
-   - Put question number and marks in bold at the top
-   - Use blank lines between elements for visual clarity
-   - Use ☐ checkbox symbols for multiple choice options
-   - Each multiple choice option on its OWN line with a blank line between
-   - Provide answer lines using underscores for written responses
-   - Never put multiple choice options on the same line
-
-4. Include mark allocations: [1 mark], [2 marks], etc. after each question number.
-
-5. USE TABLES WHERE HELPFUL — Tables improve accessibility for matching questions or data-based questions:
-   - Matching questions: | Term | Definition | (students draw lines or write letters)
-   - Data questions: Present information in clear table format
-   - Mark schemes in answers section: | Question | Answer | Marks |
-
-   Tables help students with Autism (predictable structure), ADHD (scannable), and Working Memory difficulties (all info visible).
-
-6. MATHS NOTATION — USE LATEX/KATEX:
-   - Inline maths: $x^2 + y^2 = z^2$
-   - Display maths (centered): $$\\frac{a}{b} = \\frac{c}{d}$$
-   - Fractions: $\\frac{1}{2}$, Powers: $x^2$, Roots: $\\sqrt{16}$
-   - Multiply: $3 \\times 4$, Divide: $12 \\div 3$
-   - Pi: $\\pi$, Angles: $90^\\circ$
-
-${includeAnswers ? `
-7. INCLUDE ANSWERS at the end in a separate "## ANSWERS" section:
-   - Show the correct answer for each question
-   - For extended responses, include a model answer or mark scheme points
-` : '7. Do NOT include answers — this is for the student version.'}
-
-8. IMAGE PLACEHOLDERS — Where a visual would help (e.g., diagrams for questions), insert:
-   📷 **ADD IMAGE HERE:** [Clear description of what image to add]
-
-9. At the end, include:
-   - Total marks available
-   - Suggested timing
-   - Any equipment needed
-
-═══════════════════════════════════════════════════════════════════════════════
+2. Format: **Question N** [X marks], then question, then answer space (underscores) or ☐ options.
+3. Separate questions with --- horizontal rules.
+4. Multiple choice: each option on its own line with ☐ checkbox.
+5. Use tables for matching questions and mark schemes.
+6. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).
+7. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+${includeAnswers ? `8. Include "## ANSWERS" section at the end with correct answers and mark scheme.` : '8. Do NOT include answers — student version only.'}
+9. End with: total marks, suggested timing, equipment needed.
 `
 
   return prompt
