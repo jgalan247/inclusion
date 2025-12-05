@@ -444,7 +444,11 @@ export function generateAdaptPrompt(profile, resourceContent = '', outputFormat 
   let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in adapting educational resources for students with ${conditions.map(c => c.name).join(' and ')}.
 
 YOUR TASK:
-Adapt the ${profile.keyStage.toUpperCase()} ${profile.subject} resource provided below. Preserve all educational content and learning objectives while making it accessible for a student with ${conditions.map(c => c.name).join(' and ')}.
+Adapt the ${profile.keyStage.toUpperCase()} ${profile.subject} resource below to make it genuinely accessible while maintaining academic rigour. This is NOT a simple rewrite — you must:
+- Add scaffolding (sentence starters, worked examples, hint boxes)
+- Improve clarity without dumbing down content
+- Add structure that supports the specific learning needs
+- Include teacher guidance for further differentiation
 
 KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
 
@@ -465,14 +469,29 @@ PROTECTED (DO NOT SIMPLIFY): ${subjectVocab}, direct quotes, formulas, exam comm
 OUTPUT FORMAT:
 ${formatSpec.instructions}
 
-FORMATTING:
-1. Write full prose, not bullet summaries. Maintain or increase length.
-2. Preserve ALL original content — do not skip or merge items.
-3. Use Markdown: # headings, **bold**, numbered lists, tables where helpful.
-4. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${needsMaths ? `
-5. Maths notation: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
-${needsMaths ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
-${needsMaths ? '7' : '6'}. End with "## ADAPTATIONS MADE" — list changes per condition and teacher tips.
+QUALITY REQUIREMENTS:
+1. ENHANCE, DON'T JUST REWRITE: Add scaffolding that wasn't in the original:
+   - Sentence starters for written responses ("I think... because...")
+   - Worked examples before independent questions
+   - Hint boxes for challenging sections
+   - Key vocabulary boxes with definitions
+   - Success criteria showing what a good answer looks like
+
+2. MAINTAIN ACADEMIC CHALLENGE: The adapted version must teach the same content at the same depth. Accessibility ≠ easier.
+
+3. PRESERVE ALL CONTENT: Include every question, activity, and instruction from the original.
+
+4. USE MARKDOWN: # headings, **bold**, numbered lists, tables for structured information.${needsMaths ? `
+
+5. MATHS: Use LaTeX notation ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+
+${needsMaths ? '6' : '5'}. VISUALS: Insert 📷 **ADD IMAGE:** [description] where a visual would aid understanding.
+
+${needsMaths ? '7' : '6'}. END WITH "## ADAPTATIONS MADE":
+   - List specific changes made for each condition
+   - Explain WHY each adaptation helps
+   - Include TEACHER TIPS for delivery (e.g., "pre-teach vocabulary", "allow extra processing time")
+   - Suggest EXTENSION activities for students who finish early
 
 RESOURCE TO ADAPT:
 ${resourceContent || '[PASTE YOUR RESOURCE HERE]'}
@@ -495,7 +514,11 @@ export function generateCreatePrompt(profile, options = {}) {
   let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in creating educational resources for students with ${conditions.map(c => c.name).join(' and ')}.
 
 YOUR TASK:
-Create a new ${resourceType} for a ${profile.keyStage.toUpperCase()} ${profile.subject} lesson.
+Create a high-quality, fully-developed ${resourceType} for ${profile.keyStage.toUpperCase()} ${profile.subject}. This must be:
+- Ready to use immediately (not a template or outline)
+- Pedagogically sound with clear progression
+- Accessible by design, not retrofitted
+- Engaging with varied activities
 
 TOPIC: ${topic || '[Not specified]'}
 
@@ -506,9 +529,9 @@ RESOURCE TYPE: ${resourceType}
 DURATION: ${duration || '40'} minutes
 KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
 
-STRUCTURE: ${structure.map((s, i) => `${i + 1}. ${s}`).join(', ')}
+STRUCTURE: ${structure.length > 0 ? structure.map((s, i) => `${i + 1}. ${s}`).join(', ') : 'Single activity/worksheet'}
 
-DESIGN REQUIREMENTS:
+DESIGN FOR ACCESSIBILITY FROM THE START:
 `
 
   conditions.forEach(condition => {
@@ -518,15 +541,29 @@ DESIGN REQUIREMENTS:
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   prompt += `
-SUBJECT VOCABULARY: ${subjectVocab}
+SUBJECT VOCABULARY TO USE: ${subjectVocab}
 
-OUTPUT:
-1. Create COMPLETE resource (500+ words worksheet, 800+ full lesson), not an outline.
-2. Use Markdown: # headings, **bold**, numbered lists, tables for structured data.
-3. Use tables for: vocabulary, comparisons, sequences, timings, mark schemes.${needsMaths ? `
-4. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
-${needsMaths ? '5' : '4'}. Include: learning objective, time estimates, success criteria, [TEACHER NOTE: ...].
-${needsMaths ? '6' : '5'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
+QUALITY REQUIREMENTS:
+1. CREATE SUBSTANTIAL CONTENT: 500+ words for worksheet, 800+ for full lesson. Include actual questions, activities, and explanations — not placeholders.
+
+2. BUILD IN SCAFFOLDING:
+   - Key vocabulary box at the start with definitions
+   - Worked examples before independent practice
+   - Sentence starters for written responses
+   - Hint boxes for challenging questions
+   - Success criteria ("A good answer will...")
+
+3. ENSURE PROGRESSION: Start with recall/understanding, build to application/analysis. Include extension for early finishers.
+
+4. USE MARKDOWN: # headings, **bold**, numbered lists, tables for structured data.${needsMaths ? `
+
+5. MATHS: Use LaTeX notation ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+
+${needsMaths ? '6' : '5'}. INCLUDE THROUGHOUT:
+   - Learning objective at the top
+   - Time estimates per section
+   - [TEACHER NOTE: ...] for delivery tips
+   - 📷 **ADD IMAGE:** [description] where visuals help
 `
 
   return prompt
@@ -553,13 +590,17 @@ export function generateQuizPrompt(profile, options = {}) {
   let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in creating assessments for students with ${conditions.map(c => c.name).join(' and ')}.
 
 YOUR TASK:
-Create a quiz/assessment on the topic below, accessible for a student with ${conditions.map(c => c.name).join(' and ')}.
+Create a well-designed assessment that accurately tests understanding while being accessible. The assessment should:
+- Test genuine understanding, not just recall
+- Use clear, unambiguous question wording
+- Provide appropriate scaffolding without giving away answers
+- Progress from easier to more challenging questions
 
 ${sourceType === 'topic' ? `TOPIC: ${sourceTopic}` : ''}
 ${sourceType === 'text' ? `SOURCE TEXT:\n${sourceText}\n` : ''}
 
 NUMBER OF QUESTIONS: ${questionCount || 10}
-DIFFICULTY: ${difficulty || 'medium'}
+DIFFICULTY: ${difficulty || 'medium'} (but include 2-3 easier questions at the start to build confidence)
 KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
 ${examBoard && ['ks4', 'ks5'].includes(profile.keyStage) ? `EXAM BOARD STYLE: ${examBoard}` : ''}
 
@@ -575,16 +616,32 @@ ACCESSIBILITY REQUIREMENTS:
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   prompt += `
-OUTPUT:
-1. Create EXACTLY ${questionCount || 10} questions.
-2. Format: **Question N** [X marks], then question, then answer space (underscores) or ☐ options.
-3. Separate questions with --- horizontal rules.
-4. Multiple choice: each option on its own line with ☐ checkbox.
-5. Use tables for matching questions and mark schemes.${needsMaths ? `
-6. Maths: use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
-${needsMaths ? '7' : '6'}. Images: insert 📷 **ADD IMAGE:** [description] where visuals would help.
-${includeAnswers ? `${needsMaths ? '8' : '7'}. Include "## ANSWERS" section with correct answers and mark scheme.` : `${needsMaths ? '8' : '7'}. Do NOT include answers — student version only.`}
-${needsMaths ? '9' : '8'}. End with: total marks, suggested timing, equipment needed.
+OUTPUT REQUIREMENTS:
+1. Create EXACTLY ${questionCount || 10} questions with clear mark allocations.
+
+2. QUESTION QUALITY:
+   - Each question tests ONE clear skill or concept
+   - Avoid double-barrelled questions
+   - Multiple choice distractors should be plausible, not obviously wrong
+   - Extended questions include bullet points showing what to include
+
+3. FORMAT:
+   - **Question N** [X marks] as header
+   - Separate questions with --- horizontal rules
+   - Multiple choice: each option on its own line with ☐
+   - Answer space shown with underscores
+   - Use tables for matching questions${needsMaths ? `
+
+4. MATHS: Use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+
+${needsMaths ? '5' : '4'}. VISUALS: Insert 📷 **ADD IMAGE:** [description] where a diagram/image would help.
+
+${includeAnswers ? `${needsMaths ? '6' : '5'}. INCLUDE "## ANSWERS" SECTION:
+   - Correct answer for each question
+   - Mark scheme points for extended questions
+   - Common misconceptions to watch for` : `${needsMaths ? '6' : '5'}. Do NOT include answers — this is the student version.`}
+
+${needsMaths ? '7' : '6'}. END WITH: Total marks, suggested timing (standard + extended time), equipment needed.
 `
 
   return prompt
