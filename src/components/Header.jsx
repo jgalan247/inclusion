@@ -51,8 +51,9 @@ function Header({ profile, updateProfile, addCondition, removeCondition, presets
         <div className="logo">
           <div className="logo-icon">📚</div>
           <div>
+            <div className="school-name">Le Rocquier School</div>
             <h1>AdaptEd</h1>
-            <span className="logo-tagline">Prompt Generator for Inclusive Education</span>
+            <span className="logo-tagline">AI-Powered Tools for Inclusive Education</span>
           </div>
         </div>
 

@@ -27,7 +27,7 @@ npm run preview  # Preview production build
 - **AdaptTab**: Single-page form for adapting existing resources with output format selection
 - **CreateTab**: Wizard for creating new resources from scratch
 - **QuizTab**: Wizard for generating assessments with question type selection
-- **ConvertTab**: Markdown-to-Word/PDF converter with accessibility styling (dyslexic font, cream background, large text, extra spacing)
+- **ConvertTab**: Markdown converter with accessibility styling (dyslexic font, cream background, large text, extra spacing). Exports to DOCX, PDF, PPTX, and HTML. Auto-enables accessibility options based on selected conditions.
 
 ### Prompt Generation (src/utils/promptGenerator.js)
 Core business logic file (~770 lines) containing:
@@ -46,7 +46,7 @@ ConvertTab uses custom `renderMath()` function to parse LaTeX:
 ## Key Technologies
 - React 19 + Vite 7
 - Marked (markdown) + KaTeX (math rendering)
-- file-saver + docx (Word export via HTML)
+- docx (native Word export) + pptxgenjs (PowerPoint) + html2pdf.js (PDF) + file-saver
 - Pure CSS with custom properties (no UI framework)
 
 ## Extending the System
