@@ -48,13 +48,9 @@ function Header({ profile, updateProfile, addCondition, removeCondition, presets
   return (
     <header className="header">
       <div className="header-top">
-        <div className="logo">
-          <div className="logo-icon">📚</div>
-          <div>
-            <div className="school-name">Le Rocquier School</div>
-            <h1>AdaptEd</h1>
-            <span className="logo-tagline">AI-Powered Tools for Inclusive Education</span>
-          </div>
+        <div className="logo-centered">
+          <h1 className="school-title">Le Rocquier School - AI Powered for Inclusive Education</h1>
+          <div className="app-name">AdaptEd</div>
         </div>
 
         {/* Quick Presets Button */}
