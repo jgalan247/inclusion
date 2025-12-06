@@ -99,6 +99,17 @@ body {
 }
 
 .school-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.school-title .logo-icon {
+  font-size: 2rem;
+}
+
+.school-title h1 {
   font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 700;
