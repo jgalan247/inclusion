@@ -190,6 +190,9 @@ function renderMath(html) {
   return html
 }
 
+// Track downloaded filenames to add suffix for duplicates
+const downloadedFiles = new Map()
+
 function ConvertTab({ profile }) {
   const [step, setStep] = useState(1)
   const [markdownInput, setMarkdownInput] = useState('')
@@ -201,6 +204,47 @@ function ConvertTab({ profile }) {
     extraSpacing: false,
   })
   const previewRef = useRef(null)
+
+  // Generate filename from subject + title/topic
+  const generateFilename = (extension) => {
+    // Get subject from profile
+    const subject = profile.subject ? profile.subject.charAt(0).toUpperCase() + profile.subject.slice(1) : ''
+
+    // Extract title from first H1 in markdown
+    const h1Match = markdownInput.match(/^#\s+(.+)$/m)
+    let title = h1Match ? h1Match[1] : ''
+
+    // Clean up title - remove markdown formatting and special chars
+    title = title
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .substring(0, 50) // Limit length
+
+    // Build base filename
+    let baseName = ''
+    if (subject && title) {
+      baseName = `${subject}-${title}`
+    } else if (title) {
+      baseName = title
+    } else if (subject) {
+      baseName = `${subject}-resource`
+    } else {
+      baseName = 'adapted-resource'
+    }
+
+    // Check for duplicates and add suffix
+    const key = `${baseName}.${extension}`
+    const count = downloadedFiles.get(key) || 0
+    downloadedFiles.set(key, count + 1)
+
+    if (count > 0) {
+      return `${baseName}-${count}.${extension}`
+    }
+    return `${baseName}.${extension}`
+  }
 
   const steps = [
     { num: 1, label: 'Paste Content' },
@@ -352,7 +396,7 @@ ${htmlContent}
   const downloadAsHTML = () => {
     const html = generateStyledHTML()
     const blob = new Blob([html], { type: 'text/html' })
-    saveAs(blob, 'adapted-resource.html')
+    saveAs(blob, generateFilename('html'))
   }
 
   const downloadAsWord = async () => {
@@ -466,7 +510,7 @@ ${htmlContent}
     })
 
     const blob = await Packer.toBlob(doc)
-    saveAs(blob, 'adapted-resource.docx')
+    saveAs(blob, generateFilename('docx'))
   }
 
   const downloadAsPDF = () => {
@@ -633,7 +677,7 @@ ${htmlContent}
       })
     }
 
-    pptx.writeFile({ fileName: 'adapted-resource.pptx' })
+    pptx.writeFile({ fileName: generateFilename('pptx') })
   }
 
   const sampleMarkdown = `# Macbeth: Act 1 Scene 1
