@@ -5,49 +5,110 @@ const TASK_TYPES = {
   QUIZ: 'quiz'
 }
 
-// Subject-specific scaffolding instructions
-const SUBJECT_SCAFFOLDING = {
+// Subject-specific pedagogical guidance - HOW to teach the subject
+const SUBJECT_PEDAGOGY = {
   maths: {
-    worked: 'worked examples with step-by-step solutions',
-    vocab: 'key formulas and definitions in a reference box',
-    starter: 'sentence starters like "First I will...", "The answer is ___ because..."',
-    visual: 'number lines, diagrams, or visual representations of the problem'
+    structure: `LESSON STRUCTURE:
+1. PRIOR KNOWLEDGE: Start by activating what students already know (prerequisite skills)
+2. CONCEPT INTRODUCTION: Explain the mathematical concept with concrete examples
+3. WORKED EXAMPLES: Demonstrate 2-3 problems step-by-step, increasing complexity
+4. GUIDED PRACTICE: Students try with support (hint boxes, partially worked solutions)
+5. INDEPENDENT PRACTICE: Students work alone with decreasing scaffolding
+6. CONSOLIDATION: Summary of key method, common errors to avoid`,
+    content: `MATHEMATICAL CONTENT REQUIREMENTS:
+- Define key terms precisely with mathematical notation
+- Show MULTIPLE worked examples progressing from simple to complex
+- Include "Why does this work?" explanations, not just procedures
+- Address common misconceptions explicitly
+- Provide method checklist students can follow
+- Include estimation/sense-checking prompts`,
+    questionTypes: 'fluency (practice the method), reasoning (explain why), problem-solving (apply to new contexts)'
   },
   science: {
-    worked: 'worked examples showing method and calculations',
-    vocab: 'key scientific terms with definitions',
-    starter: 'sentence starters like "I predict... because...", "The results show..."',
-    visual: 'diagrams, labelled drawings, or flowcharts'
+    structure: `LESSON STRUCTURE:
+1. ENGAGE: Hook with phenomenon, question, or demonstration
+2. EXPLORE: Investigation or guided discovery activity
+3. EXPLAIN: Introduce scientific vocabulary and concepts
+4. ELABORATE: Apply to new situations, make connections
+5. EVALUATE: Check understanding, address misconceptions`,
+    content: `SCIENTIFIC CONTENT REQUIREMENTS:
+- Use correct scientific terminology with clear definitions
+- Explain cause and effect relationships
+- Include diagrams with clear labels
+- Connect to real-world applications
+- Address common misconceptions explicitly
+- Include "What would happen if...?" questions`,
+    questionTypes: 'recall (definitions, facts), application (use knowledge), analysis (explain data/results), evaluation (judge/compare)'
   },
   english: {
-    worked: 'model answers or annotated examples',
-    vocab: 'key literary terms with definitions and examples',
-    starter: 'sentence starters like "The writer uses... to show...", "This suggests that..."',
-    visual: 'graphic organisers, quote banks, or character maps'
+    structure: `LESSON STRUCTURE:
+1. CONTEXT: Set the scene - author, period, genre, purpose
+2. FIRST READING: Overall meaning and initial response
+3. CLOSE ANALYSIS: Language, structure, form analysis
+4. INTERPRETATION: What does it mean? Multiple interpretations
+5. PERSONAL RESPONSE: Student's own supported opinion`,
+    content: `ENGLISH CONTENT REQUIREMENTS:
+- Provide relevant context (historical, biographical, genre)
+- Include the actual text/extract to analyse
+- Model analytical writing with PEE/PEEL paragraphs
+- Provide a bank of key quotes with suggested interpretations
+- Include vocabulary for analysis (e.g., connotes, implies, suggests)
+- Show how to embed quotes in sentences`,
+    questionTypes: 'comprehension (retrieve, summarise), analysis (language/structure effects), evaluation (personal response with evidence)'
   },
   history: {
-    worked: 'model paragraphs showing PEE/PEEL structure',
-    vocab: 'key historical terms and dates',
-    starter: 'sentence starters like "This source suggests...", "One reason for... was..."',
-    visual: 'timelines, source analysis frames, or comparison tables'
+    structure: `LESSON STRUCTURE:
+1. CONTEXT: When, where, what was happening
+2. KEY KNOWLEDGE: Essential facts, dates, figures
+3. SOURCE WORK: Analyse primary/secondary sources
+4. INTERPRETATION: Why did it happen? What were the consequences?
+5. SIGNIFICANCE: Why does it matter? Links to today`,
+    content: `HISTORY CONTENT REQUIREMENTS:
+- Provide clear chronological context
+- Include key dates, names, events
+- Use primary and secondary sources with provenance
+- Explain cause, consequence, change, continuity
+- Show multiple perspectives/interpretations
+- Model source analysis and extended writing`,
+    questionTypes: 'knowledge (facts, dates), source analysis (utility, reliability), explanation (causes, consequences), judgement (significance, interpretations)'
   },
   geography: {
-    worked: 'case study examples with annotations',
-    vocab: 'key geographical terms with definitions',
-    starter: 'sentence starters like "The map shows...", "This happens because..."',
-    visual: 'maps, diagrams, or annotated photos'
+    structure: `LESSON STRUCTURE:
+1. PLACE: Where is this? Locate on maps at different scales
+2. DESCRIBE: What is it like? Physical and human features
+3. EXPLAIN: Why is it like this? Processes and causes
+4. EVALUATE: What are the impacts? Who benefits/loses?
+5. FUTURE: What might happen? Sustainability`,
+    content: `GEOGRAPHY CONTENT REQUIREMENTS:
+- Include maps at appropriate scales
+- Use case studies with specific place details
+- Explain geographical processes clearly
+- Include data (statistics, graphs) to support points
+- Show connections between physical and human geography
+- Address different stakeholder perspectives`,
+    questionTypes: 'describe (what is there), explain (why/how), analyse (patterns, connections), evaluate (judge solutions, impacts)'
   },
   computing: {
-    worked: 'code examples with line-by-line explanations',
-    vocab: 'key programming terms and syntax',
-    starter: 'code templates or pseudocode outlines',
-    visual: 'flowcharts, trace tables, or diagrams'
+    structure: `LESSON STRUCTURE:
+1. UNPLUG: Introduce concept without computer first
+2. DEMONSTRATE: Show working code/algorithm with explanation
+3. MODIFY: Students adapt existing code
+4. CREATE: Students write their own solution
+5. DEBUG: Test, find errors, fix`,
+    content: `COMPUTING CONTENT REQUIREMENTS:
+- Explain concepts before showing code
+- Provide working code examples with line-by-line comments
+- Include trace tables or dry-run exercises
+- Show common errors and how to fix them
+- Build complexity gradually (start simple, add features)
+- Include pseudocode before real code`,
+    questionTypes: 'recall (definitions, syntax), trace (predict output), debug (find/fix errors), create (write code for a task)'
   }
 }
 
-// Get scaffolding for subject (default to maths style)
-function getScaffolding(subject) {
-  return SUBJECT_SCAFFOLDING[subject] || SUBJECT_SCAFFOLDING.maths
+// Get pedagogy for subject (default to maths)
+function getPedagogy(subject) {
+  return SUBJECT_PEDAGOGY[subject] || SUBJECT_PEDAGOGY.maths
 }
 
 // Neurologically-specific condition rules
@@ -402,14 +463,19 @@ export function generateAdaptPrompt(profile, resourceContent = '', outputFormat 
   const conditionNames = profile.conditions.map(c => CONDITION_RULES[c]?.name).filter(Boolean)
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
   const formatSpec = OUTPUT_FORMAT_SPECS[outputFormat] || OUTPUT_FORMAT_SPECS.same_as_original
-  const scaffolding = getScaffolding(profile.subject)
+  const pedagogy = getPedagogy(profile.subject)
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   let prompt = `Adapt this ${profile.keyStage.toUpperCase()} ${profile.subject} resource for students with ${conditionNames.join(' and ')}.
 
 KEY STAGE: ${ksDescription}
 
-ADAPTATIONS REQUIRED:
+${formatSpec.instructions}
+
+MAINTAIN PEDAGOGICAL QUALITY:
+${pedagogy.content}
+
+ACCESSIBILITY ADAPTATIONS:
 `
 
   // Add condition-specific rules
@@ -418,17 +484,9 @@ ADAPTATIONS REQUIRED:
     if (rules) prompt += rules + '\n\n'
   })
 
-  prompt += `ADD SCAFFOLDING:
-- ${scaffolding.worked}
-- ${scaffolding.vocab}
-- ${scaffolding.starter}
-- ${scaffolding.visual}
+  prompt += `FORMAT: Markdown${needsMaths ? ', LaTeX for maths ($\\frac{1}{2}$, $x^2$)' : ''}. End with brief "## Adaptations Made" summary.
 
-${formatSpec.instructions}
-
-FORMAT: Markdown${needsMaths ? ', LaTeX for maths ($\\frac{1}{2}$, $x^2$)' : ''}. End with "## Adaptations Made" summary.
-
-RESOURCE:
+RESOURCE TO ADAPT:
 ${resourceContent || '[PASTE RESOURCE HERE]'}
 `
 
@@ -440,7 +498,7 @@ export function generateCreatePrompt(profile, options = {}) {
   const { topic, learningObjectives, resourceType, duration, includeStarter, includeMain, includePlenary } = options
   const conditionNames = profile.conditions.map(c => CONDITION_RULES[c]?.name).filter(Boolean)
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
-  const scaffolding = getScaffolding(profile.subject)
+  const pedagogy = getPedagogy(profile.subject)
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   let structure = []
@@ -448,30 +506,36 @@ export function generateCreatePrompt(profile, options = {}) {
   if (includeMain) structure.push('Main (20-30 min)')
   if (includePlenary) structure.push('Plenary (5-10 min)')
 
-  let prompt = `Create a ${profile.keyStage.toUpperCase()} ${profile.subject} ${resourceType} on "${topic || '[Topic]'}" for students with ${conditionNames.join(' and ')}.
+  // Build the prompt with CONTENT FIRST
+  let prompt = `Create a ${profile.keyStage.toUpperCase()} ${profile.subject} ${resourceType} on "${topic || '[Topic]'}".
 
-LEARNING OBJECTIVES: ${learningObjectives || '[Not specified]'}
-DURATION: ${duration || '40'} min | KEY STAGE: ${ksDescription}
+LEARNING OBJECTIVES:
+${learningObjectives || '[Not specified]'}
+
+KEY STAGE: ${ksDescription}
+DURATION: ${duration || '40'} minutes
 ${structure.length > 0 ? `STRUCTURE: ${structure.join(' → ')}` : ''}
 
-ACCESSIBILITY:
+=== TEACHING CONTENT (PRIORITY) ===
+
+${pedagogy.structure}
+
+${pedagogy.content}
+
+QUESTION TYPES TO INCLUDE: ${pedagogy.questionTypes}
+
+=== ACCESSIBILITY (for students with ${conditionNames.join(' and ')}) ===
 `
 
-  // Add condition-specific rules
+  // Add condition-specific rules (more concise, after content)
   profile.conditions.forEach(c => {
     const rules = getConditionRules(c, profile.subject, TASK_TYPES.CREATE)
     if (rules) prompt += rules + '\n\n'
   })
 
-  prompt += `INCLUDE:
-- Learning objective at top
-- ${scaffolding.vocab}
-- ${scaffolding.worked}
-- ${scaffolding.starter}
-- ${scaffolding.visual}
-- Time per section, progression (recall → apply), extension task
-
-FORMAT: Markdown${needsMaths ? ', LaTeX for maths ($\\frac{1}{2}$, $x^2$)' : ''}.
+  prompt += `=== OUTPUT ===
+FORMAT: Markdown${needsMaths ? ', LaTeX for maths ($\\frac{1}{2}$, $x^2$)' : ''}
+Include: Learning objective, key vocabulary definitions, worked examples, practice questions with progression, extension task.
 `
 
   return prompt
@@ -482,6 +546,7 @@ export function generateQuizPrompt(profile, options = {}) {
   const { sourceType, sourceTopic, sourceText, questionTypes, questionCount, difficulty, includeAnswers, examBoard } = options
   const conditionNames = profile.conditions.map(c => CONDITION_RULES[c]?.name).filter(Boolean)
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
+  const pedagogy = getPedagogy(profile.subject)
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
   const typeMap = {
@@ -497,17 +562,28 @@ export function generateQuizPrompt(profile, options = {}) {
     .map(t => typeMap[t])
     .join(', ')
 
-  const topicLine = sourceType === 'topic' ? `TOPIC: ${sourceTopic}` : ''
-  const textBlock = sourceType === 'text' ? `SOURCE TEXT:\n${sourceText}\n` : ''
+  const topicLine = sourceType === 'topic' ? sourceTopic : ''
+  const textBlock = sourceType === 'text' ? `\nSOURCE TEXT:\n${sourceText}\n` : ''
 
-  let prompt = `Create a ${questionCount || 10}-question ${profile.subject} assessment for ${profile.keyStage.toUpperCase()} students with ${conditionNames.join(' and ')}.
-
-${topicLine}${textBlock}
-QUESTIONS: ${questionCount || 10} (${selectedTypes}) | DIFFICULTY: ${difficulty || 'medium'}
+  let prompt = `Create a ${profile.subject} assessment on "${topicLine || '[Topic]'}".
+${textBlock}
 KEY STAGE: ${ksDescription}
 ${examBoard && ['ks4', 'ks5'].includes(profile.keyStage) ? `EXAM BOARD STYLE: ${examBoard}` : ''}
 
-ACCESSIBILITY:
+=== ASSESSMENT CONTENT (PRIORITY) ===
+
+QUESTIONS: ${questionCount || 10} questions
+TYPES: ${selectedTypes}
+DIFFICULTY: ${difficulty || 'medium'} (start with 2-3 easier questions to build confidence)
+
+QUESTION DESIGN:
+- Test: ${pedagogy.questionTypes}
+- Each question should assess ONE clear skill or concept
+- Include a mix of question types for varied assessment
+- Progress from recall → understanding → application
+- Ensure questions directly test the learning objectives
+
+=== ACCESSIBILITY (for students with ${conditionNames.join(' and ')}) ===
 `
 
   // Add condition-specific rules (including quiz-specific additions)
@@ -516,16 +592,16 @@ ACCESSIBILITY:
     if (rules) prompt += rules + '\n\n'
   })
 
-  prompt += `FORMAT:
-- **Q1** [X marks], separate with ---
-- One concept per question, clear wording
-- MCQ: ☐ options, plausible distractors
+  prompt += `=== OUTPUT FORMAT ===
+- **Q1** [X marks] as header
+- Separate questions with ---
+- MCQ: ☐ options with plausible distractors
 - Answer lines: _____________${needsMaths ? `
 - LaTeX for maths ($\\frac{1}{2}$, $x^2$)` : ''}
 
-${includeAnswers ? `Include "## Answers" with mark scheme.` : `No answers (student version).`}
+${includeAnswers ? `Include "## Answers" section with mark scheme and common misconceptions.` : `Do NOT include answers (student version).`}
 
-End: Total marks, timing (standard + extended).
+End with: Total marks, suggested timing (standard + extended time).
 `
 
   return prompt
