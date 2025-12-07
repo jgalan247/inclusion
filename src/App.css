@@ -603,6 +603,20 @@ body {
   border-top: 1px solid var(--color-border-light);
 }
 
+.footer-links {
+  margin: var(--space-sm) 0;
+}
+
+.footer-links a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
 .footer-credits {
   font-size: 0.8rem;
   margin-top: var(--space-sm);

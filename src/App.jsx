@@ -85,6 +85,11 @@ function App() {
       </main>
       <footer className="footer">
         <p>AdaptEd — Making education accessible for every learner</p>
+        <p className="footer-links">
+          <a href="infographic.html" target="_blank" rel="noopener noreferrer">Quick Guide</a>
+          {' | '}
+          <a href="presentation.html" target="_blank" rel="noopener noreferrer">Presentation</a>
+        </p>
         <p className="footer-credits">Designed and Created by Dr Galan. Copyright <a href="https://coderra.je" target="_blank" rel="noopener noreferrer">Coderra.je</a></p>
       </footer>
     </div>
