@@ -1,324 +1,287 @@
-// Condition-specific adaptation rules
-const CONDITION_PROMPTS = {
+// Task types for context-aware rules
+const TASK_TYPES = {
+  ADAPT: 'adapt',
+  CREATE: 'create',
+  QUIZ: 'quiz'
+}
+
+// Subject-specific scaffolding instructions
+const SUBJECT_SCAFFOLDING = {
+  maths: {
+    worked: 'worked examples with step-by-step solutions',
+    vocab: 'key formulas and definitions in a reference box',
+    starter: 'sentence starters like "First I will...", "The answer is ___ because..."',
+    visual: 'number lines, diagrams, or visual representations of the problem'
+  },
+  science: {
+    worked: 'worked examples showing method and calculations',
+    vocab: 'key scientific terms with definitions',
+    starter: 'sentence starters like "I predict... because...", "The results show..."',
+    visual: 'diagrams, labelled drawings, or flowcharts'
+  },
+  english: {
+    worked: 'model answers or annotated examples',
+    vocab: 'key literary terms with definitions and examples',
+    starter: 'sentence starters like "The writer uses... to show...", "This suggests that..."',
+    visual: 'graphic organisers, quote banks, or character maps'
+  },
+  history: {
+    worked: 'model paragraphs showing PEE/PEEL structure',
+    vocab: 'key historical terms and dates',
+    starter: 'sentence starters like "This source suggests...", "One reason for... was..."',
+    visual: 'timelines, source analysis frames, or comparison tables'
+  },
+  geography: {
+    worked: 'case study examples with annotations',
+    vocab: 'key geographical terms with definitions',
+    starter: 'sentence starters like "The map shows...", "This happens because..."',
+    visual: 'maps, diagrams, or annotated photos'
+  },
+  computing: {
+    worked: 'code examples with line-by-line explanations',
+    vocab: 'key programming terms and syntax',
+    starter: 'code templates or pseudocode outlines',
+    visual: 'flowcharts, trace tables, or diagrams'
+  }
+}
+
+// Get scaffolding for subject (default to maths style)
+function getScaffolding(subject) {
+  return SUBJECT_SCAFFOLDING[subject] || SUBJECT_SCAFFOLDING.maths
+}
+
+// Neurologically-specific condition rules
+// Each condition targets the actual cognitive/processing differences
+
+const CONDITION_RULES = {
   autism: {
     name: 'Autism Spectrum Condition',
-    rules: `
-AUTISM-SPECIFIC ADAPTATIONS:
-
-1. LITERAL LANGUAGE: Replace ALL idioms, metaphors, and figurative expressions with literal equivalents.
-   ✗ "Shakespeare hit the nail on the head"
-   ✓ "Shakespeare expressed this idea exactly right"
-   ✗ "The character is over the moon"
-   ✓ "The character is extremely happy"
-   ✗ "It's raining cats and dogs"
-   ✓ "It is raining very heavily"
-
-2. EXPLICIT INSTRUCTIONS: Convert implied instructions to explicit, numbered steps.
-   ✗ "Answer the questions below"
-   ✓ "Step 1: Read question 1 carefully.
-      Step 2: Write your answer on the line provided.
-      Step 3: Check your answer makes sense.
-      Step 4: Move to question 2."
-
-3. UNAMBIGUOUS PRONOUNS: Replace pronouns with the noun they refer to when there is any possibility of confusion.
-   ✗ "Macbeth sees Banquo's ghost. He is terrified by it."
-   ✓ "Macbeth sees Banquo's ghost. Macbeth is terrified by the ghost."
-
-4. CONCRETE QUANTITIES: Replace vague quantities with specific numbers.
-   ✗ "Write a few sentences"
-   ✓ "Write 3-4 sentences"
-   ✗ "Spend some time on this"
-   ✓ "Spend 5 minutes on this"
-
-5. PREDICTABLE STRUCTURE: Use consistent, numbered sections throughout.
-   - Number all questions (1, 2, 3...)
-   - Use clear headings for each section
-   - Keep the same layout pattern throughout
-
-6. CLEAR TRANSITIONS: Signal when moving between activities.
-   "You have finished Section 1. Now move to Section 2."
-
-7. REMOVE AMBIGUITY: If a question could be interpreted multiple ways, clarify exactly what is being asked.
-
-8. EXPLICIT SUCCESS CRITERIA: Tell the student exactly what a good answer looks like.
-   "A good answer will: (1) state your opinion, (2) give one reason, (3) use a quote from the text."
-`
+    // ASC: Difficulty with implicit meaning, need for predictability, literal interpretation
+    getCore: (subject) => {
+      const base = `- LITERAL LANGUAGE: No idioms, metaphors, or sarcasm—say exactly what you mean
+- EXPLICIT SEQUENCE: Number every step; never assume they'll infer the next action
+- CLEAR REFERENTS: Replace "it", "this", "they" with the specific noun
+- PRECISE QUANTITIES: "Write 3 sentences" not "Write a few sentences"
+- PREDICTABLE STRUCTURE: Same layout pattern throughout; signal any changes`
+      // Subject-specific additions
+      if (subject === 'english') {
+        return base + `\n- Explain figurative language when analysing texts ("This metaphor means...")`
+      }
+      if (subject === 'maths' || subject === 'science') {
+        return base + `\n- State exactly what format the answer should be in`
+      }
+      return base
+    },
+    quiz: `- Single, unambiguous instruction per question
+- State exactly how many points/reasons required`
   },
 
   adhd: {
     name: 'ADHD',
-    rules: `
-ADHD-SPECIFIC ADAPTATIONS:
-
-1. CHUNK CONTENT: Break long sections into smaller, numbered chunks.
-   - Maximum 3-4 bullet points per section
-   - One concept per paragraph
-   - Clear visual separation between chunks
-
-2. ADD TIME ESTIMATES: Include realistic time for each task.
-   "This task should take about 5 minutes."
-   "Section 1 (10 minutes) | Section 2 (15 minutes)"
-
-3. PROGRESS INDICATORS: Add checkboxes or progress markers.
-   ☐ Task 1: Read the extract
-   ☐ Task 2: Answer questions 1-3
-   ☐ Task 3: Complete the table
-
-4. REDUCE TEXT DENSITY: Use more white space and shorter paragraphs.
-   - Maximum 3 sentences per paragraph
-   - Generous spacing between sections
-
-5. HIGHLIGHT KEY INFORMATION: Use bold for critical words and instructions.
-   "Read the text **carefully** and **underline** the key points."
-
-6. INCLUDE BRAIN BREAKS: For longer resources, suggest short breaks.
-   "BRAIN BREAK: Stand up, stretch, take 3 deep breaths, then continue."
-
-7. ENGAGING HOOKS: Start sections with interesting facts or questions.
-   "Did you know...?" or "What would you do if...?"
-
-8. CLEAR START AND END POINTS: Make it obvious where to begin and when finished.
-   "START HERE →" and "✓ You have completed this section!"
-
-9. MINIMIZE DISTRACTIONS: Remove unnecessary decorative elements.
-   - Only include images that serve educational purpose
-   - Avoid cluttered layouts
-`
+    // ADHD: Executive function challenges, need for novelty, difficulty sustaining attention
+    getCore: (subject) => {
+      const base = `- CHUNKED CONTENT: Max 3-4 items per section; one concept per chunk
+- TIME ANCHORS: Estimate for each task ("~5 mins") to aid time-blindness
+- PROGRESS TRACKING: Checkboxes ☐ to show completion and maintain momentum
+- VISUAL SIGNPOSTING: Bold key words; clear START/STOP markers
+- VARIED ACTIVITIES: Mix question types to maintain engagement`
+      if (subject === 'english' || subject === 'history') {
+        return base + `\n- Break long texts into labelled sections with specific focus questions`
+      }
+      if (subject === 'maths') {
+        return base + `\n- One problem type per section; clear transition between topics`
+      }
+      return base
+    },
+    quiz: `- Short question stems; avoid multi-part questions
+- Visual breaks between questions (spacing/lines)`
   },
 
   dyslexia: {
     name: 'Dyslexia',
-    rules: `
-DYSLEXIA-SPECIFIC ADAPTATIONS:
-
-1. SIMPLIFY SENTENCE STRUCTURE: Use shorter sentences with clear structure.
-   ✗ "The character, who had been living in the castle for many years, decided that it was time to leave."
-   ✓ "The character lived in the castle for many years. He decided to leave."
-
-2. AVOID COMPLEX VOCABULARY: Use simpler alternatives for non-technical words.
-   ✗ "approximately" → ✓ "about"
-   ✗ "subsequently" → ✓ "then" or "after"
-   ✗ "utilise" → ✓ "use"
-   (Keep technical/subject vocabulary but add definitions)
-
-3. ADD DEFINITIONS: Define difficult words in brackets on first use.
-   "The protagonist (main character) faces a difficult choice."
-
-4. USE ACTIVE VOICE: Convert passive sentences to active.
-   ✗ "The ball was kicked by the boy"
-   ✓ "The boy kicked the ball"
-
-5. AVOID DOUBLE NEGATIVES: Rewrite to be clearer.
-   ✗ "It is not uncommon"
-   ✓ "It is common"
-
-6. BULLET KEY INFORMATION: Present important facts as short bullet points.
-
-7. VISUAL SUPPORTS: Suggest adding images, diagrams, or graphic organisers.
-   [Add diagram here showing...]
-
-8. LINE SPACING NOTE: Add instruction for teacher:
-   "FORMATTING NOTE: Print with 1.5 or double line spacing. Consider cream/pastel paper."
-`
+    // Dyslexia: Phonological processing, decoding difficulties, working memory load from reading
+    getCore: (subject) => {
+      const base = `- REDUCED READING LOAD: Short sentences (max 15-20 words); one idea per sentence
+- DECODABLE VOCABULARY: Simple words for instructions; keep technical terms with definitions
+- ACTIVE CONSTRUCTIONS: "Calculate the area" not "The area should be calculated"
+- SCANNABLE FORMAT: Bullets, numbered lists; avoid dense paragraphs`
+      if (subject === 'english') {
+        return base + `\n- Provide key quotes rather than requiring students to find them
+- Audio/visual alternatives where possible`
+      }
+      if (subject === 'maths' || subject === 'science') {
+        return base + `\n- Minimise word problems; use diagrams and symbols where possible`
+      }
+      return base
+    },
+    quiz: `- Keep question stems short and direct
+- Bold key instruction words (calculate, explain, describe)`
   },
 
   dyscalculia: {
     name: 'Dyscalculia',
-    rules: `
-DYSCALCULIA-SPECIFIC ADAPTATIONS:
-
-1. VISUAL NUMBER REPRESENTATIONS: Accompany numbers with visual aids.
-   "3 items" → "3 items ○○○"
-   Include number lines where helpful
-
-2. STEP-BY-STEP CALCULATIONS: Break mathematical processes into clear steps.
-   Step 1: Write down what you know
-   Step 2: Identify the operation needed
-   Step 3: Perform the calculation
-   Step 4: Check your answer makes sense
-
-3. CONCRETE EXAMPLES: Use real-world, tangible examples for mathematical concepts.
-   ✗ "Calculate 3 × 4"
-   ✓ "You have 3 bags. Each bag has 4 apples. How many apples in total?"
-
-4. FORMULA BOXES: Provide formula reference boxes.
-   ┌─────────────────────────┐
-   │ Area = length × width   │
-   └─────────────────────────┘
-
-5. GRAPH PAPER SUGGESTION: Note when graph paper would help.
-   "TEACHER NOTE: Provide graph paper for calculations."
-
-6. ESTIMATION BEFORE CALCULATION: Ask students to estimate first.
-   "Before calculating, estimate: Will the answer be more or less than 100?"
-
-7. REDUCE COGNITIVE LOAD: Only one calculation type per section.
-`
+    // Dyscalculia: Number sense difficulties, spatial aspects of maths, procedural memory for algorithms
+    getCore: (subject) => {
+      // Dyscalculia rules are primarily relevant for maths/science
+      if (subject === 'maths') {
+        return `- CONCRETE FIRST: Physical/visual representations before abstract (○○○, number lines, place value grids)
+- PROCEDURAL SCAFFOLDING: Every calculation broken into numbered micro-steps
+- FORMULA REFERENCE: Keep formulas visible; don't require memorisation
+- ESTIMATION HABITS: "Will the answer be bigger/smaller than...?" before calculating
+- SINGLE OPERATION: One operation type per section; explicit transition between types
+- REAL CONTEXTS: Embed numbers in meaningful scenarios`
+      }
+      if (subject === 'science') {
+        return `- CALCULATION SUPPORT: Step-by-step method boxes for any calculations
+- FORMULA REFERENCE: Provide all formulas; focus on understanding not recall
+- VISUAL DATA: Prefer diagrams/graphs over tables of numbers
+- ESTIMATION: Encourage sense-checking ("Is this answer reasonable?")`
+      }
+      // For non-maths subjects, minimal rules
+      return `- Provide any numerical information in multiple formats
+- Don't assume comfort with dates, statistics, or data interpretation`
+    },
+    quiz: `- Provide formula sheet
+- Include "estimate first" prompts
+- Partial marks for correct method`
   },
 
   anxiety: {
     name: 'Anxiety',
-    rules: `
-ANXIETY-SPECIFIC ADAPTATIONS:
-
-1. REASSURING LANGUAGE: Use calm, supportive tone throughout.
-   ✗ "You must complete all questions"
-   ✓ "Complete as many questions as you can"
-   ✗ "This is a test"
-   ✓ "This is a practice activity"
-
-2. REMOVE PRESSURE WORDS: Avoid words that create stress.
-   Avoid: must, have to, test, exam, fail, wrong, hurry
-   Use: try, practice, activity, check, take your time
-
-3. EXPLICIT PERMISSION STATEMENTS: Include reassuring permissions.
-   "It is okay to:"
-   - Re-read the text as many times as you need
-   - Skip a question and come back to it
-   - Ask for help if you're stuck
-   - Take a short break if you need one
-
-4. NORMALISE DIFFICULTY: Acknowledge that some parts may be challenging.
-   "Some students find this question tricky. Take your time."
-
-5. GROWTH MINDSET FRAMING: Focus on learning, not performance.
-   ✗ "Get the right answer"
-   ✓ "Show your thinking"
-
-6. CLEAR EXPECTATIONS: Remove uncertainty about what's expected.
-   "There are 10 questions. You have 30 minutes. This is not timed strictly."
-
-7. OPTIONAL TIMERS: Make timing flexible.
-   "Suggested time: 20 minutes (but take longer if you need)"
-`
+    // Anxiety: Threat sensitivity, perfectionism, avoidance, physical symptoms under stress
+    getCore: (subject) => {
+      const base = `- LOW-THREAT LANGUAGE: "Try", "practice", "explore" not "must", "test", "exam"
+- PERMISSION STATEMENTS: "It's okay to skip and return", "Ask for help anytime"
+- REDUCE UNCERTAINTY: Clear expectations; "There are 5 questions. This should take about 15 minutes."
+- NORMALISE STRUGGLE: "Many students find this challenging—take your time"
+- GROWTH FRAMING: Focus on process/thinking, not just correct answers`
+      if (subject === 'maths' || subject === 'science') {
+        return base + `\n- Emphasise method marks; "Show your working—partial credit available"`
+      }
+      if (subject === 'english') {
+        return base + `\n- "There's no single right answer—explain your interpretation"`
+      }
+      return base
+    },
+    quiz: `- Call it "practice activity" not "test"
+- "Show your thinking" not "Get the right answer"
+- Note partial credit is available`
   },
 
   visual_processing: {
     name: 'Visual Processing Difficulties',
-    rules: `
-VISUAL PROCESSING ADAPTATIONS:
-
-1. CLEAN LAYOUTS: Remove visual clutter.
-   - One task per page where possible
-   - Clear borders around text boxes
-   - Generous margins
-
-2. CONSISTENT FORMATTING: Use the same layout throughout.
-   - Same font throughout
-   - Same heading styles
-   - Predictable structure
-
-3. HIGH CONTRAST: Ensure text stands out from background.
-   "FORMATTING NOTE: Use black text on cream/pale yellow background."
-
-4. AVOID DENSE TEXT: Break up large text blocks.
-   - Short paragraphs
-   - Bullet points
-   - White space between sections
-
-5. CLEAR VISUAL HIERARCHY: Make headings obviously different from body text.
-   - Larger headings
-   - Bold section titles
-   - Numbered sections
-
-6. IMAGE DESCRIPTIONS: Describe any images in text.
-   "[Image shows: A diagram of the water cycle with arrows showing evaporation, condensation, and precipitation]"
-`
+    // Visual processing: Difficulty interpreting visual information, tracking, visual crowding
+    getCore: (subject) => {
+      const base = `- UNCLUTTERED LAYOUT: Maximum 1-2 elements per visual area; generous margins
+- CONSISTENT VISUAL LANGUAGE: Same fonts, heading sizes, spacing throughout
+- CLEAR HIERARCHY: Obvious distinction between headings, subheadings, body text
+- DESCRIBED VISUALS: Text description of any image, graph, or diagram content`
+      if (subject === 'maths' || subject === 'science') {
+        return base + `\n- Large, well-spaced numbers and symbols
+- Avoid crowded diagrams; label clearly`
+      }
+      if (subject === 'geography') {
+        return base + `\n- Describe map features in text; use high-contrast colours`
+      }
+      return base
+    },
+    quiz: `- One question visible at a time where possible
+- Clear spacing between answer options
+- Avoid questions requiring detailed visual interpretation`
   },
 
   working_memory: {
     name: 'Working Memory Difficulties',
-    rules: `
-WORKING MEMORY ADAPTATIONS:
-
-1. REPEAT KEY INFORMATION: Restate important facts where needed.
-   Don't assume student remembers information from earlier in the document.
-
-2. REFERENCE BOXES: Provide information boxes that stay visible.
-   ┌─────────────────────────────────┐
-   │ KEY INFORMATION                 │
-   │ • Character: Macbeth            │
-   │ • Setting: Scotland, 1040       │
-   │ • Theme: Ambition and guilt     │
-   └─────────────────────────────────┘
-
-3. ONE INSTRUCTION AT A TIME: Break multi-step instructions into single steps.
-   ✗ "Read the text, underline key words, and answer questions 1-5"
-   ✓ "Step 1: Read the text
-      Step 2: Underline key words
-      Step 3: Answer questions 1-5"
-
-4. REDUCE INFORMATION LOAD: Only include essential information.
-   Remove tangential details that aren't necessary.
-
-5. EXPLICIT CONNECTIONS: Link new information to what came before.
-   "Remember from the previous section that Macbeth met the witches. Now..."
-`
+    // Working memory: Limited capacity for holding/manipulating information simultaneously
+    getCore: (subject) => {
+      const base = `- EXTERNAL MEMORY AIDS: Reference boxes with key facts visible throughout
+- SINGLE-STEP INSTRUCTIONS: One action per instruction; sequence numbered separately
+- INFORMATION AT POINT OF NEED: Repeat relevant facts where needed; don't assume recall
+- REDUCED COGNITIVE LOAD: Remove non-essential information`
+      if (subject === 'maths') {
+        return base + `\n- Keep formulas visible; provide worked example alongside practice questions`
+      }
+      if (subject === 'english' || subject === 'history') {
+        return base + `\n- Provide key quotes/facts alongside questions that need them`
+      }
+      if (subject === 'science') {
+        return base + `\n- Method steps visible during experiments; key definitions in margin`
+      }
+      return base
+    },
+    quiz: `- Include all information needed within each question
+- Don't require recall from a passage read earlier
+- Keep instructions visible`
   },
 
   slow_processing: {
     name: 'Slow Processing Speed',
-    rules: `
-SLOW PROCESSING ADAPTATIONS:
-
-1. REDUCE QUANTITY: Include fewer questions/tasks but maintain depth.
-   "TEACHER NOTE: Student may complete questions 1, 3, 5 only."
-
-2. DIRECT LANGUAGE: Get to the point quickly.
-   ✗ "In order to successfully complete this task, you will need to..."
-   ✓ "To complete this task:"
-
-3. REMOVE REDUNDANCY: Say things once, clearly.
-   Don't repeat information in multiple ways.
-
-4. EXTENDED TIME NOTES: Include time accommodation guidance.
-   "Standard time: 30 minutes. Extended time (×1.5): 45 minutes."
-
-5. PRE-TEACHING VOCABULARY: List key words at the start.
-   "Key words in this activity: [word 1], [word 2], [word 3]"
-
-6. REDUCED READING LOAD: Shorten passages where possible.
-   Provide text summaries alongside full texts.
-`
+    // Slow processing: Needs more time to take in, process, and respond to information
+    getCore: (subject) => {
+      const base = `- REDUCED QUANTITY, SAME DEPTH: Fewer questions covering same learning objectives
+- STREAMLINED LANGUAGE: Direct instructions; remove filler words and redundancy
+- TIERED TASKS: Mark "Core" (must do) vs "Extension" (if time permits)
+- TIME GUIDANCE: "Standard: 30 min | Extended: 45 min"`
+      if (subject === 'english' || subject === 'history') {
+        return base + `\n- Shorter source texts or provide summary alongside full text`
+      }
+      if (subject === 'maths') {
+        return base + `\n- Fewer practice questions; focus on depth of understanding`
+      }
+      return base
+    },
+    quiz: `- Mark questions as Core/Extension
+- Provide timing guidance (standard + extended time)
+- Fewer questions testing same skills`
   },
 
   eal: {
     name: 'English as Additional Language',
-    rules: `
-EAL ADAPTATIONS:
-
-1. SIMPLIFIED NON-TECHNICAL LANGUAGE: Use simple English for instructions.
-   ✗ "Approximately calculate the perimeter"
-   ✓ "Find the perimeter" (keep "perimeter" as technical term)
-
-2. REMOVE IDIOMS AND CULTURAL REFERENCES:
-   ✗ "At a boot sale, John buys..."
-   ✓ "At a market, John buys..."
-   ✗ British slang or colloquialisms
-
-3. CLEAR SENTENCE STRUCTURES:
-   - Subject-verb-object order
-   - Avoid complex subordinate clauses
-   - One idea per sentence
-
-4. VOCABULARY SUPPORT: Bold technical terms and provide definitions.
-   "the **perimeter** (the distance around the outside)"
-
-5. CULTURAL NEUTRALITY:
-   - Explain any cultural references
-   - Use internationally understood contexts
-   - Use diverse names in examples
-
-6. GLOSSARY: Include a key terms glossary at the start.
-   ┌────────────────────────────────┐
-   │ KEY TERMS                      │
-   │ perimeter = distance around    │
-   │ calculate = work out           │
-   │ approximately = about          │
-   └────────────────────────────────┘
-`
+    // EAL: Language barrier, cultural unfamiliarity, academic English vs conversational
+    getCore: (subject) => {
+      const base = `- SIMPLIFIED INSTRUCTION LANGUAGE: Short sentences; common vocabulary for non-technical words
+- NO IDIOMS OR CULTURAL ASSUMPTIONS: "At a market" not "At a boot sale"; diverse names
+- TECHNICAL VOCABULARY SUPPORT: **Bold** subject terms with brief definition in brackets
+- GLOSSARY: Key terms box at start with simple definitions`
+      if (subject === 'english') {
+        return base + `\n- Explain historical/cultural context of texts
+- Provide vocabulary lists for literary analysis`
+      }
+      if (subject === 'history') {
+        return base + `\n- Explain UK-specific historical context that may be unfamiliar`
+      }
+      return base
+    },
+    quiz: `- Culturally neutral scenarios and names
+- Define complex vocabulary within the question
+- Avoid idiomatic question phrasing`
   }
 }
+
+// Build condition rules based on task type and subject
+function getConditionRules(conditionKey, subject, taskType = TASK_TYPES.CREATE) {
+  const condition = CONDITION_RULES[conditionKey]
+  if (!condition) return ''
+
+  // Get subject-specific core rules
+  const coreRules = condition.getCore ? condition.getCore(subject) : (condition.core || '')
+  let rules = `${condition.name.toUpperCase()}:\n${coreRules}`
+
+  // Add quiz-specific rules if applicable
+  if (taskType === TASK_TYPES.QUIZ && condition.quiz) {
+    rules += `\n${condition.quiz}`
+  }
+
+  return rules
+}
+
+// Legacy support - get full CONDITION_PROMPTS object
+const CONDITION_PROMPTS = Object.fromEntries(
+  Object.entries(CONDITION_RULES).map(([key, value]) => [
+    key,
+    { name: value.name, getRules: (subject) => getConditionRules(key, subject) }
+  ])
+)
 
 // Subject-specific protected vocabulary
 const SUBJECT_VOCABULARY = {
@@ -434,214 +397,135 @@ Make this a comprehensive learning resource with substantial text content explai
   }
 }
 
-// Generate the complete prompt
+// Generate the ADAPT prompt - for adapting existing resources
 export function generateAdaptPrompt(profile, resourceContent = '', outputFormat = 'same_as_original') {
-  const conditions = profile.conditions.map(c => CONDITION_PROMPTS[c]).filter(Boolean)
-  const subjectVocab = SUBJECT_VOCABULARY[profile.subject] || ''
+  const conditionNames = profile.conditions.map(c => CONDITION_RULES[c]?.name).filter(Boolean)
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
   const formatSpec = OUTPUT_FORMAT_SPECS[outputFormat] || OUTPUT_FORMAT_SPECS.same_as_original
+  const scaffolding = getScaffolding(profile.subject)
+  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
-  let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in adapting educational resources for students with ${conditions.map(c => c.name).join(' and ')}.
+  let prompt = `Adapt this ${profile.keyStage.toUpperCase()} ${profile.subject} resource for students with ${conditionNames.join(' and ')}.
 
-YOUR TASK:
-Adapt the ${profile.keyStage.toUpperCase()} ${profile.subject} resource below to make it genuinely accessible while maintaining academic rigour. This is NOT a simple rewrite — you must:
-- Add scaffolding (sentence starters, worked examples, hint boxes)
-- Improve clarity without dumbing down content
-- Add structure that supports the specific learning needs
-- Include teacher guidance for further differentiation
+KEY STAGE: ${ksDescription}
 
-KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
-
-ADAPTATION RULES:
+ADAPTATIONS REQUIRED:
 `
 
   // Add condition-specific rules
-  conditions.forEach(condition => {
-    prompt += condition.rules + '\n'
+  profile.conditions.forEach(c => {
+    const rules = getConditionRules(c, profile.subject, TASK_TYPES.ADAPT)
+    if (rules) prompt += rules + '\n\n'
   })
 
-  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
+  prompt += `ADD SCAFFOLDING:
+- ${scaffolding.worked}
+- ${scaffolding.vocab}
+- ${scaffolding.starter}
+- ${scaffolding.visual}
 
-  // Add protected vocabulary and output requirements
-  prompt += `
-PROTECTED (DO NOT SIMPLIFY): ${subjectVocab}, direct quotes, formulas, exam command words, proper nouns, dates.
-
-OUTPUT FORMAT:
 ${formatSpec.instructions}
 
-QUALITY REQUIREMENTS:
-1. ENHANCE, DON'T JUST REWRITE: Add scaffolding that wasn't in the original:
-   - Sentence starters for written responses ("I think... because...")
-   - Worked examples before independent questions
-   - Hint boxes for challenging sections
-   - Key vocabulary boxes with definitions
-   - Success criteria showing what a good answer looks like
+FORMAT: Markdown${needsMaths ? ', LaTeX for maths ($\\frac{1}{2}$, $x^2$)' : ''}. End with "## Adaptations Made" summary.
 
-2. MAINTAIN ACADEMIC CHALLENGE: The adapted version must teach the same content at the same depth. Accessibility ≠ easier.
-
-3. PRESERVE ALL CONTENT: Include every question, activity, and instruction from the original.
-
-4. USE MARKDOWN: # headings, **bold**, numbered lists, tables for structured information.${needsMaths ? `
-
-5. MATHS: Use LaTeX notation ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
-
-${needsMaths ? '6' : '5'}. VISUALS: Insert 📷 **ADD IMAGE:** [description] where a visual would aid understanding.
-
-${needsMaths ? '7' : '6'}. END WITH "## ADAPTATIONS MADE":
-   - List specific changes made for each condition
-   - Explain WHY each adaptation helps
-   - Include TEACHER TIPS for delivery (e.g., "pre-teach vocabulary", "allow extra processing time")
-   - Suggest EXTENSION activities for students who finish early
-
-RESOURCE TO ADAPT:
-${resourceContent || '[PASTE YOUR RESOURCE HERE]'}
+RESOURCE:
+${resourceContent || '[PASTE RESOURCE HERE]'}
 `
 
   return prompt
 }
 
+// Generate the CREATE prompt - for creating new resources from scratch
 export function generateCreatePrompt(profile, options = {}) {
   const { topic, learningObjectives, resourceType, duration, includeStarter, includeMain, includePlenary } = options
-  const conditions = profile.conditions.map(c => CONDITION_PROMPTS[c]).filter(Boolean)
-  const subjectVocab = SUBJECT_VOCABULARY[profile.subject] || ''
+  const conditionNames = profile.conditions.map(c => CONDITION_RULES[c]?.name).filter(Boolean)
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
-
-  let structure = []
-  if (includeStarter) structure.push('Starter activity (5-10 minutes)')
-  if (includeMain) structure.push('Main activity/activities (20-30 minutes)')
-  if (includePlenary) structure.push('Plenary/review (5-10 minutes)')
-
-  let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in creating educational resources for students with ${conditions.map(c => c.name).join(' and ')}.
-
-YOUR TASK:
-Create a high-quality, fully-developed ${resourceType} for ${profile.keyStage.toUpperCase()} ${profile.subject}. This must be:
-- Ready to use immediately (not a template or outline)
-- Pedagogically sound with clear progression
-- Accessible by design, not retrofitted
-- Engaging with varied activities
-
-TOPIC: ${topic || '[Not specified]'}
-
-LEARNING OBJECTIVES:
-${learningObjectives || '[Not specified]'}
-
-RESOURCE TYPE: ${resourceType}
-DURATION: ${duration || '40'} minutes
-KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
-
-STRUCTURE: ${structure.length > 0 ? structure.map((s, i) => `${i + 1}. ${s}`).join(', ') : 'Single activity/worksheet'}
-
-DESIGN FOR ACCESSIBILITY FROM THE START:
-`
-
-  conditions.forEach(condition => {
-    prompt += condition.rules + '\n'
-  })
-
+  const scaffolding = getScaffolding(profile.subject)
   const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
-  prompt += `
-SUBJECT VOCABULARY TO USE: ${subjectVocab}
+  let structure = []
+  if (includeStarter) structure.push('Starter (5-10 min)')
+  if (includeMain) structure.push('Main (20-30 min)')
+  if (includePlenary) structure.push('Plenary (5-10 min)')
 
-QUALITY REQUIREMENTS:
-1. CREATE SUBSTANTIAL CONTENT: 500+ words for worksheet, 800+ for full lesson. Include actual questions, activities, and explanations — not placeholders.
+  let prompt = `Create a ${profile.keyStage.toUpperCase()} ${profile.subject} ${resourceType} on "${topic || '[Topic]'}" for students with ${conditionNames.join(' and ')}.
 
-2. BUILD IN SCAFFOLDING:
-   - Key vocabulary box at the start with definitions
-   - Worked examples before independent practice
-   - Sentence starters for written responses
-   - Hint boxes for challenging questions
-   - Success criteria ("A good answer will...")
+LEARNING OBJECTIVES: ${learningObjectives || '[Not specified]'}
+DURATION: ${duration || '40'} min | KEY STAGE: ${ksDescription}
+${structure.length > 0 ? `STRUCTURE: ${structure.join(' → ')}` : ''}
 
-3. ENSURE PROGRESSION: Start with recall/understanding, build to application/analysis. Include extension for early finishers.
+ACCESSIBILITY:
+`
 
-4. USE MARKDOWN: # headings, **bold**, numbered lists, tables for structured data.${needsMaths ? `
+  // Add condition-specific rules
+  profile.conditions.forEach(c => {
+    const rules = getConditionRules(c, profile.subject, TASK_TYPES.CREATE)
+    if (rules) prompt += rules + '\n\n'
+  })
 
-5. MATHS: Use LaTeX notation ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
+  prompt += `INCLUDE:
+- Learning objective at top
+- ${scaffolding.vocab}
+- ${scaffolding.worked}
+- ${scaffolding.starter}
+- ${scaffolding.visual}
+- Time per section, progression (recall → apply), extension task
 
-${needsMaths ? '6' : '5'}. INCLUDE THROUGHOUT:
-   - Learning objective at the top
-   - Time estimates per section
-   - [TEACHER NOTE: ...] for delivery tips
-   - 📷 **ADD IMAGE:** [description] where visuals help
+FORMAT: Markdown${needsMaths ? ', LaTeX for maths ($\\frac{1}{2}$, $x^2$)' : ''}.
 `
 
   return prompt
 }
 
+// Generate the QUIZ prompt - for creating assessments
 export function generateQuizPrompt(profile, options = {}) {
   const { sourceType, sourceTopic, sourceText, questionTypes, questionCount, difficulty, includeAnswers, examBoard } = options
-  const conditions = profile.conditions.map(c => CONDITION_PROMPTS[c]).filter(Boolean)
+  const conditionNames = profile.conditions.map(c => CONDITION_RULES[c]?.name).filter(Boolean)
   const ksDescription = KEY_STAGE_DESCRIPTIONS[profile.keyStage] || ''
+  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
 
-  const questionTypeDescriptions = {
-    multiple_choice: 'Multiple choice (4 options, 1 correct)',
-    short_answer: 'Short answer (1-2 sentences)',
-    true_false: 'True or False',
-    matching: 'Matching pairs',
-    fill_blank: 'Fill in the blank',
-    extended: 'Extended response (paragraph answer)'
+  const typeMap = {
+    multiple_choice: 'MCQ',
+    short_answer: 'Short answer',
+    true_false: 'True/False',
+    matching: 'Matching',
+    fill_blank: 'Fill blank',
+    extended: 'Extended'
   }
 
   const selectedTypes = (questionTypes || ['multiple_choice', 'short_answer'])
-    .map(t => questionTypeDescriptions[t])
-    .join('\n   - ')
+    .map(t => typeMap[t])
+    .join(', ')
 
-  let prompt = `You are an expert SENCO and ${profile.subject} teacher specialising in creating assessments for students with ${conditions.map(c => c.name).join(' and ')}.
+  const topicLine = sourceType === 'topic' ? `TOPIC: ${sourceTopic}` : ''
+  const textBlock = sourceType === 'text' ? `SOURCE TEXT:\n${sourceText}\n` : ''
 
-YOUR TASK:
-Create a well-designed assessment that accurately tests understanding while being accessible. The assessment should:
-- Test genuine understanding, not just recall
-- Use clear, unambiguous question wording
-- Provide appropriate scaffolding without giving away answers
-- Progress from easier to more challenging questions
+  let prompt = `Create a ${questionCount || 10}-question ${profile.subject} assessment for ${profile.keyStage.toUpperCase()} students with ${conditionNames.join(' and ')}.
 
-${sourceType === 'topic' ? `TOPIC: ${sourceTopic}` : ''}
-${sourceType === 'text' ? `SOURCE TEXT:\n${sourceText}\n` : ''}
-
-NUMBER OF QUESTIONS: ${questionCount || 10}
-DIFFICULTY: ${difficulty || 'medium'} (but include 2-3 easier questions at the start to build confidence)
-KEY STAGE: ${profile.keyStage.toUpperCase()} - ${ksDescription}
+${topicLine}${textBlock}
+QUESTIONS: ${questionCount || 10} (${selectedTypes}) | DIFFICULTY: ${difficulty || 'medium'}
+KEY STAGE: ${ksDescription}
 ${examBoard && ['ks4', 'ks5'].includes(profile.keyStage) ? `EXAM BOARD STYLE: ${examBoard}` : ''}
 
-QUESTION TYPES: ${selectedTypes.replace(/\n   - /g, ', ')}
-
-ACCESSIBILITY REQUIREMENTS:
+ACCESSIBILITY:
 `
 
-  conditions.forEach(condition => {
-    prompt += condition.rules + '\n'
+  // Add condition-specific rules (including quiz-specific additions)
+  profile.conditions.forEach(c => {
+    const rules = getConditionRules(c, profile.subject, TASK_TYPES.QUIZ)
+    if (rules) prompt += rules + '\n\n'
   })
 
-  const needsMaths = ['maths', 'science', 'computing'].includes(profile.subject)
+  prompt += `FORMAT:
+- **Q1** [X marks], separate with ---
+- One concept per question, clear wording
+- MCQ: ☐ options, plausible distractors
+- Answer lines: _____________${needsMaths ? `
+- LaTeX for maths ($\\frac{1}{2}$, $x^2$)` : ''}
 
-  prompt += `
-OUTPUT REQUIREMENTS:
-1. Create EXACTLY ${questionCount || 10} questions with clear mark allocations.
+${includeAnswers ? `Include "## Answers" with mark scheme.` : `No answers (student version).`}
 
-2. QUESTION QUALITY:
-   - Each question tests ONE clear skill or concept
-   - Avoid double-barrelled questions
-   - Multiple choice distractors should be plausible, not obviously wrong
-   - Extended questions include bullet points showing what to include
-
-3. FORMAT:
-   - **Question N** [X marks] as header
-   - Separate questions with --- horizontal rules
-   - Multiple choice: each option on its own line with ☐
-   - Answer space shown with underscores
-   - Use tables for matching questions${needsMaths ? `
-
-4. MATHS: Use LaTeX ($\\frac{1}{2}$, $x^2$, $\\sqrt{16}$, $\\times$, $\\div$).` : ''}
-
-${needsMaths ? '5' : '4'}. VISUALS: Insert 📷 **ADD IMAGE:** [description] where a diagram/image would help.
-
-${includeAnswers ? `${needsMaths ? '6' : '5'}. INCLUDE "## ANSWERS" SECTION:
-   - Correct answer for each question
-   - Mark scheme points for extended questions
-   - Common misconceptions to watch for` : `${needsMaths ? '6' : '5'}. Do NOT include answers — this is the student version.`}
-
-${needsMaths ? '7' : '6'}. END WITH: Total marks, suggested timing (standard + extended time), equipment needed.
+End: Total marks, timing (standard + extended).
 `
 
   return prompt

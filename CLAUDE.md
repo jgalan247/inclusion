@@ -30,12 +30,17 @@ npm run preview  # Preview production build
 - **ConvertTab**: Markdown converter with accessibility styling (dyslexic font, cream background, large text, extra spacing). Exports to DOCX, PDF, PPTX, and HTML. Auto-enables accessibility options based on selected conditions.
 
 ### Prompt Generation (src/utils/promptGenerator.js)
-Core business logic file (~770 lines) containing:
+Core business logic file containing:
 - `CONDITION_PROMPTS`: Rules for 9 conditions (Autism, ADHD, Dyslexia, Dyscalculia, Anxiety, Visual Processing, Working Memory, Slow Processing, EAL) with ✗ Bad / ✓ Good examples
 - `SUBJECT_VOCABULARY`: Protected technical terms per subject (english, maths, science, history, geography, computing)
 - `KEY_STAGE_DESCRIPTIONS`: UK age-appropriate guidance (KS1-KS5)
-- `OUTPUT_FORMAT_SPECS`: Templates for worksheet, full_lesson, presentation, handout, revision_guide
+- `OUTPUT_FORMAT_SPECS`: Templates for worksheet, full_lesson, presentation, handout, revision_guide, same_as_original
 - Export functions: `generateAdaptPrompt()`, `generateCreatePrompt()`, `generateQuizPrompt()`
+
+### Profile System (App.jsx)
+- `PRESETS`: Quick-start configurations for common setups (e.g., "Autism - English KS3")
+- Profile stored in localStorage under `adaptedProfile` key
+- Minimum 1 condition required, maximum 3
 
 ### Math Rendering
 ConvertTab uses custom `renderMath()` function to parse LaTeX:
