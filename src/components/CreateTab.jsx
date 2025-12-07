@@ -232,7 +232,7 @@ function CreateTab({ profile }) {
               <h4>📝 What To Do Next</h4>
               <ol>
                 <li><strong>Copy</strong> the prompt above</li>
-                <li>Open <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">ChatGPT</a> or <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a></li>
+                <li>Open <a href="https://copilot.microsoft.com" target="_blank" rel="noopener noreferrer">Copilot</a>, <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">ChatGPT</a>, or <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a></li>
                 <li><strong>Paste</strong> the prompt and press Enter</li>
                 <li>Review the generated resource</li>
                 <li>Ask the AI to modify anything that needs changing</li>

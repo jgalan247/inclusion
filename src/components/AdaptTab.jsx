@@ -37,6 +37,13 @@ function AdaptTab({ profile }) {
     window.open('https://chat.openai.com/', '_blank')
   }
 
+  const copyAndOpenClaude = () => {
+    navigator.clipboard.writeText(generatedPrompt)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 3000)
+    window.open('https://claude.ai/', '_blank')
+  }
+
   const copyOnly = () => {
     navigator.clipboard.writeText(generatedPrompt)
     setCopied(true)
@@ -132,16 +139,23 @@ Tip: Select All (Ctrl+A) → Copy (Ctrl+C) from your Word/PDF/PowerPoint documen
               <button
                 onClick={copyAndOpenCopilot}
                 className="btn btn-primary btn-large"
-                style={{ flex: '1', minWidth: '200px', justifyContent: 'center', padding: '16px' }}
+                style={{ flex: '1', minWidth: '150px', justifyContent: 'center', padding: '16px' }}
               >
                 {copied ? '✓ Copied!' : '📋 Copy & Open Copilot'}
               </button>
               <button
                 onClick={copyAndOpenChatGPT}
                 className="btn btn-secondary btn-large"
-                style={{ flex: '1', minWidth: '200px', justifyContent: 'center', padding: '16px' }}
+                style={{ flex: '1', minWidth: '150px', justifyContent: 'center', padding: '16px' }}
               >
                 {copied ? '✓ Copied!' : '📋 Copy & Open ChatGPT'}
+              </button>
+              <button
+                onClick={copyAndOpenClaude}
+                className="btn btn-secondary btn-large"
+                style={{ flex: '1', minWidth: '150px', justifyContent: 'center', padding: '16px' }}
+              >
+                {copied ? '✓ Copied!' : '📋 Copy & Open Claude'}
               </button>
             </div>
 
