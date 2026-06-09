@@ -15,6 +15,8 @@ npm run lint     # ESLint on .js/.jsx files
 npm run preview  # Preview production build
 ```
 
+No test framework is configured — there are no test scripts or test files in this project.
+
 ## Architecture
 
 ### Core Data Flow
@@ -36,6 +38,9 @@ Core business logic file containing:
 - `KEY_STAGE_DESCRIPTIONS`: UK age-appropriate guidance (KS1-KS5)
 - `OUTPUT_FORMAT_SPECS`: Templates for worksheet, full_lesson, presentation, handout, revision_guide, same_as_original
 - Export functions: `generateAdaptPrompt()`, `generateCreatePrompt()`, `generateQuizPrompt()`
+
+### Static Pages (public/)
+- `presentation.html` and `infographic.html` are standalone HTML files (not part of the React component tree), served from `public/` and linked from the App footer via plain `<a href>` tags. The app has no client-side router — these are the only "other pages."
 
 ### Profile System (App.jsx)
 - `PRESETS`: Quick-start configurations for common setups (e.g., "Autism - English KS3")

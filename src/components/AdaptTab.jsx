@@ -12,7 +12,7 @@ const OUTPUT_FORMATS = [
 
 function AdaptTab({ profile }) {
   const [resourceContent, setResourceContent] = useState('')
-  const [outputFormat, setOutputFormat] = useState('same_as_original')
+  const [outputFormat, setOutputFormat] = useState('handout')
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [copied, setCopied] = useState(false)
   const [showPrompt, setShowPrompt] = useState(false)
@@ -201,7 +201,7 @@ Tip: Select All (Ctrl+A) → Copy (Ctrl+C) from your Word/PDF/PowerPoint documen
               onClick={() => {
                 setShowPrompt(false)
                 setResourceContent('')
-                setOutputFormat('same_as_original')
+                setOutputFormat('handout')
                 setGeneratedPrompt('')
               }}
               style={{ width: '100%', justifyContent: 'center' }}
